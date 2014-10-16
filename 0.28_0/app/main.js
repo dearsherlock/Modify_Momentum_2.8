@@ -290,8 +290,30 @@ m.views.Dashboard = Backbone.View.extend({
         var dateTimer = setInterval(function () {
             m.models.date.set('date', new Date());
         }, 50);
-        m.collect.backgrounds = new m.collect.Backgrounds();
-        m.collect.backgrounds.fetch({async: false});
+        
+	m.collect.backgrounds = new m.collect.Backgrounds();
+	
+	// JO: Fetch is async so wait for results before instantiating view
+        m.collect.backgrounds.fetch({
+            success: function(response, xhr) {
+                if ( navigator.onLine ) {
+                    m.flickr.$promise.done(function( data ) {
+                        var flickrImages = m.flickr.getImagesUrl( data.photos.photo );
+                        m.flickr.setTotalPage( data.photos.pages );
+                        m.collect.backgrounds.add( flickrImages );
+                        m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
+                    });
+                } else {
+                    m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
+                }
+            },
+            error: function (errorResponse) {
+                console.log(errorResponse);
+            }
+        });
+	
+        /* mark by sherlock replace debause it is not retreive flickr image
+	m.collect.backgrounds.fetch({async: false});
 
         m.views.background = new m.views.Background({
           collection: m.collect.backgrounds,
@@ -327,7 +349,12 @@ m.views.Dashboard = Backbone.View.extend({
             m.trigger('newDay');
           }
           ensureLocalStorageDatesAreValid();
-        }, 200);
+        }, 200);*/
+	if (!localStorage['name']) {
+            m.views.introduction = new m.views.Introduction({ region: 'center' });
+        } else {
+            this.render();
+        }
     },
 
     render: function () {
