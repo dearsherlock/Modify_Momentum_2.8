@@ -77,7 +77,7 @@ m.views.Todos = Backbone.View.extend({
         this.listenTo(this.collection, 'add', this.addOne);
         this.listenTo(this.collection, 'reset', this.addAll);
         //this.listenTo(m, 'newDay', this.clearCompleted);
-        this.listenTo(m.model.date, 'newDay', this.clearCompleted);
+        this.listenTo(m.models.date, 'newDay', this.clearCompleted);
 	this.collection.fetch();
     },
     render: function() {

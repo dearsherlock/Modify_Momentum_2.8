@@ -34,6 +34,7 @@ m.views.Message = Backbone.View.extend({
     render: function() {
         var appVersion = chrome.app.getDetails().version;
         var message = m.collect.messages.where({ version: appVersion })[0];
+	//THIS LOOKS NO PROBLEM, NEW VERSION CODE IS FIXING NULL POINT
         if (message) {
             var messageAttribs = message.attributes;
 
