@@ -353,6 +353,7 @@ m.views.Dashboard = Backbone.View.extend({
 	if (!localStorage['name']) {
             m.views.introduction = new m.views.Introduction({ region: 'center' });
         } else {
+	    //IF mark below,it will disable show all info,but render flickr is ok
             this.render();
         }
     },
@@ -444,7 +445,7 @@ $(function() {
 });
 //add below 8 lines
 var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-44319322-1']);
+_gaq.push(['_setAccount', 'UA-55800824-2-1']);
 _gaq.push(['_trackPageview']);
 
 (function() {
@@ -459,7 +460,7 @@ _gaq.push(['_trackPageview']);
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-ga('create', 'UA-44319322-1', 'auto');
+ga('create', 'UA-55800824-2', 'auto');
 ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. See http://stackoverflow.com/a/22152353/1958200
 ga('require', 'displayfeatures');
 ga('send', 'pageview');
