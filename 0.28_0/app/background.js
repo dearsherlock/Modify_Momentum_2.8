@@ -21,7 +21,7 @@ m.collect.Backgrounds = Backbone.Collection.extend({
     }
 });
 
-
+//add m.flickr setter block
 // Get images from flickr.com
 
 m.flickr = {
@@ -92,12 +92,12 @@ m.views.Background = Backbone.View.extend({
     //template: Handlebars.compile( $("#background-template").html() ),
     initialize: function () {
         //this.render();
-        	this.loadNewBg();
+        this.loadNewBg();//add
         //this.model.on('newDay', _.bind(this.loadNewBg, this));
 	this.listenTo(m, 'newDay', this.loadNewBg, this);
     },
     render: function () {
-        /*
+        /* mark by sherlock
         var that = this;
         var index = window.localStorage['background'];
         if (!index || Number(index)+1 > this.collection.length) {
@@ -139,6 +139,7 @@ m.views.Background = Backbone.View.extend({
             $('body').append('<img src="'+impressionUrl+'">');
         }
         */
+	//ADD beblow contents
         var that = this;
         var index = window.localStorage['background'] || 0;
         //console.log('index is ' + index);
@@ -192,6 +193,7 @@ m.views.Background = Backbone.View.extend({
         }
         this.render();
         */
+	// REPLACE BY below code
         //console.log('loadNewBg called');
         var index = window.localStorage['background'];
         //console.log('current bg: ' + index);
@@ -203,12 +205,13 @@ m.views.Background = Backbone.View.extend({
         window.localStorage['background'] = newIndex;
         this.render();
     },
+    //ADD loadStockBg function
     loadStockBg: function() {
         var newIndex = Math.floor( Math.random() * ( this.collection.models.length - m.flickr.range ) );
         window.localStorage['background'] = newIndex;
         this.render();
     }
-    /*
+    /* mark by sherlock
     getNewIndex: function () {
         
         var currentIndex = localStorage.background;
@@ -245,10 +248,10 @@ m.views.Background = Backbone.View.extend({
         }
 
         return newBackground;
-    }
-    */
+    }*/
+    
 });
-/*
+/* mark by sherlock
 m.views.BackgroundInfo = Backbone.View.extend({
     tagName: 'div',
     attributes: { id: 'background-info', class: 'light' },

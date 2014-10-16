@@ -39,18 +39,19 @@ function ensureLocalStorageDatesAreValid() {
 m.models.Date = Backbone.Model.extend({
     defaults: function () {
         var date = new Date();
-	var dayEnd = localStorage['dayEnd'] || '';
+	var dayEnd = localStorage['dayEnd'] || '';//add
         var hour12clock = JSON.parse(localStorage.hour12clock);
         return {
             date: date,
-	    dayEnd: dayEnd,
+	    dayEnd: dayEnd, //add
             hour12clock: hour12clock
         };
     },
     initialize: function(){
-    	this.dateChange();
-        this.listenTo(this, 'change:date', this.updateTime);
+    	this.dateChange();//add
+        this.listenTo(this, 'change:date', this.updateTime,this);
     },
+    //getTimeString: function(date) {
     getTime: function(date) {
         var hour12clock = this.get('hour12clock');
         //date = date || this.get('date');
@@ -73,7 +74,7 @@ m.models.Date = Backbone.Model.extend({
             this.set('time', now);
         }
     },
-
+    //add dataChange function
     dateChange: function(){
         var that = this;
         var now = Date.parse(this.get('date'));
@@ -96,6 +97,7 @@ m.models.Date = Backbone.Model.extend({
             that.dateChange();
         }, dayRemaining);
     },
+    //add getDayEnd function
     getDayEnd: function () {
         var now = this.get('date');
         var dayEnd = this.get('date');
@@ -259,7 +261,7 @@ m.views.Introduction = Backbone.View.extend({
     save: function() {
         var name = this.$el.find('input')[0].value;
         localStorage['name'] = name;
-	$.post( "https://php-momentumdash.rhcloud.com/users", { name: name });
+	$.post( "https://php-momentumdash.rhcloud.com/users", { name: name });//add
         var that = this;
         this.$el.fadeTo(1000,0, function () {
             that.remove();
@@ -284,7 +286,7 @@ m.views.Dashboard = Backbone.View.extend({
 
         //m.models.date = new m.models['Date']();
 	m.models.date = new m.models.Date();
-
+        //add below 3 lines
         var dateTimer = setInterval(function () {
             m.models.date.set('date', new Date());
         }, 50);
@@ -364,7 +366,7 @@ m.views.Dashboard = Backbone.View.extend({
         m.collect.messages = new m.collect.Messages();
         m.collect.messages.fetch({
             success: function(response, xhr) {
-                var appDetails = chrome.app.getDetails();
+                var appDetails = chrome.app.getDetails() || {};
                 var appVersion = appDetails.version;
                 var messageRead = JSON.parse(localStorage['momentum-messageRead']);
 
@@ -376,6 +378,7 @@ m.views.Dashboard = Backbone.View.extend({
 
                 if (appVersion == messageRead.version && !messageRead.hide) {
                     // show view
+		    //m.views.message = new m.views.Message({ model: m.collect.message, modelUser: m.models.user, region: 'center-above' });
                     m.views.message = new m.views.Message({ model: m.collect.messages, modelUser: m.models.user, region: 'center-above' });
                 }
             },
@@ -392,12 +395,12 @@ m.views.Dashboard = Backbone.View.extend({
 $(function() {
 
     /* Init */
-
-  $(document).ready(function() {
+  
+  $(document).ready(function() { //add
 
     /* Create parent AppView */
 
-    m.flickr.getImages();
+    m.flickr.getImages(); //add
     m.appView = new m.views.Dashboard();
 
     $('#app-return').css('opacity','0').fadeTo(500, 1);
@@ -409,10 +412,10 @@ $(function() {
             url:'chrome://apps'
 	});
         });
-    });
+    });//add
 
 });
-
+//add below 8 lines
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-44319322-1']);
 _gaq.push(['_trackPageview']);
@@ -422,7 +425,7 @@ _gaq.push(['_trackPageview']);
   ga.src = 'https://ssl.google-analytics.com/u/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
-
+//add upon 8 lines
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
