@@ -5,7 +5,8 @@
 
 m.models.Background = Backbone.Model.extend({
     parse: function(response) {
-        this.set({ 'filename': response.filename, 'title': response.title, 'source': response.source, 'sourceUrl': response.sourceUrl, 'shutterstockPromo': response.shutterstockPromo, 'impressionUrl': response.impressionUrl });
+        //this.set({ 'filename': response.filename, 'title': response.title, 'source': response.source, 'sourceUrl': response.sourceUrl, 'shutterstockPromo': response.shutterstockPromo, 'impressionUrl': response.impressionUrl });
+    	this.set({ 'filename': response.filename });
     }
 });
 
@@ -21,6 +22,67 @@ m.collect.Backgrounds = Backbone.Collection.extend({
 });
 
 
+// Get images from flickr.com
+
+m.flickr = {
+    // the number of flickr images would be added to the collection.
+    range: 0,
+    sample: function(obj, n, guard) {
+        if (n == null || guard) {
+            if (obj.length !== +obj.length) obj = _.values(obj);
+            return obj[_.random(obj.length - 1)];
+        }
+        return _.shuffle(obj).slice(0, Math.max(0, n));
+    },
+    getRandomInt: function( min, max ) {
+        return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+    },
+    getImages: function() {
+        var that = this;
+        // total pages flickr returned.
+        var totalPages = window.localStorage['momentum-flickr-pages'] || 1;
+        var http = 'https://',
+            url = 'api.flickr.com/services/rest/?',
+            method = 'method=flickr.photos.search',
+            api_key = 'api_key=729e5e1c40dbfe0ee2d1b85e88e281a6',
+            geo_context = 'geo_context=1',
+            pages = 'page=' + that.getRandomInt( 1, totalPages ),
+            format = 'format=json&nojsoncallback=1';
+
+        m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
+    },
+    getImagesUrl: function( photos ) {
+        var sample = [];
+        var that = this;
+
+        function _makePicUrl( photo ) {
+            var http = 'https://',
+                farm = 'farm' + photo.farm + '.staticflickr.com/',
+                server = photo.server + '/',
+                pic = photo.id + '_' + photo.secret + '_' + 'b.jpg';
+
+            return http + farm + server + pic;
+        }
+
+        that.range = Math.floor( photos.length / 2 );
+
+        _.each( that.sample( photos, that.range ), function( photo ) {
+            if ( photo.ispublic ) {
+                sample.push({
+                   filename: '',
+                   title: photo.title,
+                   source: "",
+                   source_url: "",
+                   flickr:  _makePicUrl( photo )
+                });
+            }
+        });
+        return sample;
+    },
+    setTotalPage: function( num ) {
+        window.localStorage['momentum-flickr-pages'] = num;
+    }
+};
 // Views
 
 m.views.Background = Backbone.View.extend({
@@ -29,10 +91,13 @@ m.views.Background = Backbone.View.extend({
     // JO: Testing setting background without a template
     //template: Handlebars.compile( $("#background-template").html() ),
     initialize: function () {
-        this.render();
-        this.listenTo(m, 'newDay', this.loadNewBg, this);
+        //this.render();
+        	this.loadNewBg();
+        //this.model.on('newDay', _.bind(this.loadNewBg, this));
+	this.listenTo(m, 'newDay', this.loadNewBg, this);
     },
     render: function () {
+        /*
         var that = this;
         var index = window.localStorage['background'];
         if (!index || Number(index)+1 > this.collection.length) {
@@ -73,9 +138,50 @@ m.views.Background = Backbone.View.extend({
         if (impressionUrl) {
             $('body').append('<img src="'+impressionUrl+'">');
         }
+        */
+        var that = this;
+        var index = window.localStorage['background'] || 0;
+        //console.log('index is ' + index);
+        //console.log('localstorage background is ' + localStorage['background']);
+        window.localStorage['background'] = index;
+        var filename = this.collection.at(index).get('filename');
+        var flickr = this.collection.at(index).get('flickr');
+        var order = (this.options.order || 'append') + 'To';
+
+        // JO: Hack to get the backgrounds to fade between each other; replace with background subviews and separate LIs
+        $('#background').css('background-image',$('#background').find('li').css('background-image'));
+
+        // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
+        if ( "" !== filename ) {
+            $('<img/>')
+            .attr('src', 'backgrounds/' + filename)
+            .load(function() {
+                that.$el[order]('#' + that.options.region)
+                .css('background-image','url(backgrounds/' + filename + ')')
+                .css('opacity','0')
+                .fadeTo(200, 1);
+                $(this).remove();
+            });
+        } else if ( "" === filename && flickr ) {
+            $.ajax({
+                url: flickr,
+                timeout: 7000
+            })
+            .success(function() {
+                that.$el[order]('#' + that.options.region)
+                .css('background-image','url(' + flickr + ')')
+                .css('opacity','0')
+                .fadeTo(200, 1);
+            })
+            .fail(function() {
+                console.log("timeout fail");
+                that.loadStockBg();
+            });
+        }
     },
     loadNewBg: function () {
         // attempting to solve the race condition where multiple tabs are open
+        /*mark by sherlock
         var now = new Date();
         var backgroundUpdate = new Date(localStorage.backgroundUpdate);
 
@@ -85,7 +191,24 @@ m.views.Background = Backbone.View.extend({
             localStorage.background = index;
         }
         this.render();
+        */
+        //console.log('loadNewBg called');
+        var index = window.localStorage['background'];
+        //console.log('current bg: ' + index);
+        var newIndex = Math.floor(Math.random()*this.collection.models.length);
+        //console.log('new bg: ' + newIndex);
+        if (newIndex == index) newIndex + 1;
+        if (newIndex == this.collection.models.length) newIndex = 0;
+        //console.log('new bg: ' + newIndex);
+        window.localStorage['background'] = newIndex;
+        this.render();
     },
+    loadStockBg: function() {
+        var newIndex = Math.floor( Math.random() * ( this.collection.models.length - m.flickr.range ) );
+        window.localStorage['background'] = newIndex;
+        this.render();
+    }
+    /*
     getNewIndex: function () {
         
         var currentIndex = localStorage.background;
@@ -123,8 +246,9 @@ m.views.Background = Backbone.View.extend({
 
         return newBackground;
     }
+    */
 });
-
+/*
 m.views.BackgroundInfo = Backbone.View.extend({
     tagName: 'div',
     attributes: { id: 'background-info', class: 'light' },
@@ -165,3 +289,4 @@ m.views.BackgroundInfo = Backbone.View.extend({
         ga('send', 'event', 'BackgroundInfo', 'Click', localStorage.background);
     }
 });
+*/

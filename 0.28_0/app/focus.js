@@ -32,8 +32,11 @@ m.views.Focuses = Backbone.View.extend({
     },
     initialize: function () {
         this.render();
-        this.listenTo(m, 'newDay', this.changeDay, this);
-        this.listenTo(m.collect.focuses, 'add', this.addToday);
+	//alert("hi")
+        //this.listenTo(m, 'newDay', this.changeDay, this);
+        this.listenTo(this.model, 'newDay', this.changeDay);
+        
+	this.listenTo(m.collect.focuses, 'add', this.addToday);
         this.listenTo(m.collect.focuses, 'remove', this.delToday);
     },
     render: function () {

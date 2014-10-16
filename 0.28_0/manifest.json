@@ -6,7 +6,7 @@
    "chrome_url_overrides": {
       "newtab": "dashboard.html"
    },
-   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://query.yahooapis.com 'unsafe-eval'; object-src 'self'",
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://query.yahooapis.com https://php-momentumdash.rhcloud.com 'unsafe-eval'; object-src 'self'",
    "description": "Replace new tab page with a personal dashboard featuring todo, weather, and inspiration.",
    "icons": {
       "128": "icon-128.png",

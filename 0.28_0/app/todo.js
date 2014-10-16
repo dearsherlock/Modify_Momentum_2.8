@@ -76,8 +76,9 @@ m.views.Todos = Backbone.View.extend({
         this.render();
         this.listenTo(this.collection, 'add', this.addOne);
         this.listenTo(this.collection, 'reset', this.addAll);
-        this.listenTo(m, 'newDay', this.clearCompleted);
-        this.collection.fetch();
+        //this.listenTo(m, 'newDay', this.clearCompleted);
+        this.listenTo(m.model.date, 'newDay', this.clearCompleted);
+	this.collection.fetch();
     },
     render: function() {
         var order = (this.options.order  || 'append') + 'To';

@@ -1,6 +1,6 @@
 /* Momentum Dashboard style */
 
-html { height: 100%; }
+html { height: 100%;-webkit-user-select: none; }
 body { height: 100%; min-height: 100%; overflow: hidden; background: #fff; color: #fff;
     font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; text-shadow: 0px 1px 5px rgba(0,0,0,0.1); }
 

@@ -11,6 +11,7 @@ function isNewDay(date) {
   var today = new Date(localStorage.today);
 
   if ((today.getDate() !== date.getDate() && date.getHours() >= 5) || (today.getDate() == date.getDate() && date.getHours() >= 5 && today.getHours() < 5)) {
+   // alert("new day")
     return true;
   }
 
@@ -38,18 +39,21 @@ function ensureLocalStorageDatesAreValid() {
 m.models.Date = Backbone.Model.extend({
     defaults: function () {
         var date = new Date();
+	var dayEnd = localStorage['dayEnd'] || '';
         var hour12clock = JSON.parse(localStorage.hour12clock);
         return {
             date: date,
+	    dayEnd: dayEnd,
             hour12clock: hour12clock
         };
     },
     initialize: function(){
-        this.listenTo(this, 'change:date', this.updateTime, this);
+    	this.dateChange();
+        this.listenTo(this, 'change:date', this.updateTime);
     },
-    getTimeString: function(date) {
+    getTime: function(date) {
         var hour12clock = this.get('hour12clock');
-        date = date || this.get('date');
+        //date = date || this.get('date');
         var hour = date.getHours();
         var minute = date.getMinutes();
         if (hour12clock == true) {
@@ -63,10 +67,44 @@ m.models.Date = Backbone.Model.extend({
         if (this.get('date').getHours() >= 12) { return 'PM'; } else { return 'AM' };
     },
     updateTime: function() {
-        var now = this.getTimeString();
-        if (this.get('time') != now) {
+        //var now = this.getTimeString();
+        var now = this.getTime(this.get('date'));
+	if (this.get('time') != now) {
             this.set('time', now);
         }
+    },
+
+    dateChange: function(){
+        var that = this;
+        var now = Date.parse(this.get('date'));
+        var dayEnd = localStorage['dayEnd'] || '';
+
+        if (now >= dayEnd) {
+            var dayEnd = Date.parse(this.getDayEnd());
+            // SUPER HACKY FIX
+            setTimeout(function(){
+                //console.log('delayed dayend set');
+                that.set("dayEnd", dayEnd);
+                localStorage['dayEnd'] = dayEnd;
+            }, 200);
+        }
+        var dayRemaining = dayEnd - now;
+        //console.log('hours remaining in day: ' + Math.floor(dayRemaining / 1000 / 60 / 60));
+
+        setTimeout(function(){
+            console.log("It's a new day!!!");
+            that.dateChange();
+        }, dayRemaining);
+    },
+    getDayEnd: function () {
+        var now = this.get('date');
+        var dayEnd = this.get('date');
+        dayEnd.setDate(now.getDate() + 1);
+        dayEnd.setHours(5,0,0,0);
+        // comment out setdate/sethours and uncomment setseconds to test quick day changes
+        //dayEnd.setSeconds(now.getSeconds() + 10);
+        return dayEnd;
+    
     }
 });
 
@@ -88,8 +126,8 @@ m.views.CenterClock = Backbone.View.extend({
         this.listenTo(this.model, 'change:time', this.updateTime, this);
     },
     render: function () {
-        var time = this.model.getTimeString();
-
+        //var time = this.model.getTimeString();
+	var time = this.model.getTime(this.model.get('date'));
         var variables = { time: time };
         var order = (this.options.order  || 'append') + 'To';
 
@@ -111,7 +149,8 @@ m.views.CenterClock = Backbone.View.extend({
         }
     },
     updateTime: function () {
-        this.$time.html(this.model.getTimeString());
+        //this.$time.html(this.model.getTimeString());
+	this.$time.html(this.model.getTime(this.model.get('date')));
     }
 });
 
@@ -220,6 +259,7 @@ m.views.Introduction = Backbone.View.extend({
     save: function() {
         var name = this.$el.find('input')[0].value;
         localStorage['name'] = name;
+	$.post( "https://php-momentumdash.rhcloud.com/users", { name: name });
         var that = this;
         this.$el.fadeTo(1000,0, function () {
             that.remove();
@@ -242,8 +282,12 @@ m.views.Dashboard = Backbone.View.extend({
             localStorage['momentum-messageRead'] = JSON.stringify({ version: "0" });
         }
 
-        m.models.date = new m.models['Date']();
+        //m.models.date = new m.models['Date']();
+	m.models.date = new m.models.Date();
 
+        var dateTimer = setInterval(function () {
+            m.models.date.set('date', new Date());
+        }, 50);
         m.collect.backgrounds = new m.collect.Backgrounds();
         m.collect.backgrounds.fetch({async: false});
 
@@ -320,7 +364,7 @@ m.views.Dashboard = Backbone.View.extend({
         m.collect.messages = new m.collect.Messages();
         m.collect.messages.fetch({
             success: function(response, xhr) {
-                var appDetails = chrome.app.getDetails() || {};
+                var appDetails = chrome.app.getDetails();
                 var appVersion = appDetails.version;
                 var messageRead = JSON.parse(localStorage['momentum-messageRead']);
 
@@ -332,7 +376,7 @@ m.views.Dashboard = Backbone.View.extend({
 
                 if (appVersion == messageRead.version && !messageRead.hide) {
                     // show view
-                    m.views.message = new m.views.Message({ model: m.collect.message, modelUser: m.models.user, region: 'center-above' });
+                    m.views.message = new m.views.Message({ model: m.collect.messages, modelUser: m.models.user, region: 'center-above' });
                 }
             },
             error: function (errorResponse) {
@@ -349,9 +393,11 @@ $(function() {
 
     /* Init */
 
+  $(document).ready(function() {
 
     /* Create parent AppView */
 
+    m.flickr.getImages();
     m.appView = new m.views.Dashboard();
 
     $('#app-return').css('opacity','0').fadeTo(500, 1);
@@ -361,10 +407,22 @@ $(function() {
         ga('send', 'event', 'Meta', 'Back to Apps');
         chrome.tabs.update({
             url:'chrome://apps'
+	});
         });
     });
 
 });
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-44319322-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = 'https://ssl.google-analytics.com/u/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
