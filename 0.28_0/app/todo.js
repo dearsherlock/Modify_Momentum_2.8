@@ -77,7 +77,7 @@ m.views.Todos = Backbone.View.extend({
         this.listenTo(this.collection, 'add', this.addOne);
         this.listenTo(this.collection, 'reset', this.addAll);
         //this.listenTo(m, 'newDay', this.clearCompleted);
-        this.listenTo(m.models.date, 'newDay', this.clearCompleted);
+        this.listenTo(m.models.date, 'change:dayEnd', this.clearCompleted);
 	this.collection.fetch();
     },
     render: function() {
@@ -102,7 +102,7 @@ m.views.Todos = Backbone.View.extend({
         return false;
     },
     createOnEnter: function (e) {
-        ga('send', 'event', 'Todo', 'Add');
+        _gaq.push(['_trackEvent', 'Todo', 'Add']);
         var val = this.$el.find('#todo-new')[0].value;
         if (e.keyCode != 13) return;
         if (!val) return;
@@ -131,7 +131,7 @@ m.views.Todos = Backbone.View.extend({
     },
     toggleShow: function (e) {
         e.preventDefault();
-        ga('send', 'event', 'Todo', 'Toggle Show');
+        _gaq.push(['_trackEvent', 'Todo', 'Toggle Show']);
         $('#todo').toggleClass('show');
         localStorage['showTodoList'] = !JSON.parse(localStorage['showTodoList']);
         this.$el.find('#todo-new').focus();
@@ -169,7 +169,7 @@ m.views.Todo = Backbone.View.extend({
         return this;
     },
     clear: function() {
-        ga('send', 'event', 'Todo', 'Delete');
+        _gaq.push(['_trackEvent', 'Todo', 'Delete']);
         this.model.destroy();
     },
     close: function() {
@@ -213,11 +213,11 @@ m.views.Todo = Backbone.View.extend({
         this.model.save({ order: myIndex });
     },
     toggleDone: function() {
-        ga('send', 'event', 'Todo', 'Done');
+        _gaq.push(['_trackEvent', 'Todo', 'Done']);
         this.model.toggle();
     },
     updateOnEnter: function(e) {
-        ga('send', 'event', 'Todo', 'Edit');
+        _gaq.push(['_trackEvent', 'Todo', 'Edit']);
         if (e.keyCode == 13) this.close();
     }
 });

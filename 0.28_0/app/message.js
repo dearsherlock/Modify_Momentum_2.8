@@ -61,6 +61,6 @@ m.views.Message = Backbone.View.extend({
         console.log(this.messageRead);
         this.messageRead.hide = true;
         localStorage['momentum-messageRead'] = JSON.stringify(this.messageRead);
-        ga('send', 'event', 'Message', 'Hide', this.messageRead.count);
+        _gaq.push(['_trackEvent', 'Message', 'Hide', this.messageRead.count]);
     }
 });

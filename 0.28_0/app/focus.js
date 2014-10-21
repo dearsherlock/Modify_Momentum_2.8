@@ -33,8 +33,9 @@ m.views.Focuses = Backbone.View.extend({
     initialize: function () {
         this.render();
         //this.listenTo(m, 'newDay', this.changeDay, this);
-        this.listenTo(this.model, 'newDay', this.changeDay);
-	this.listenTo(m.collect.focuses, 'add', this.addToday);
+        //this.listenTo(this.model, 'newDay', this.changeDay);
+	this.listenTo(this.model, 'change:dayEnd', this.changeDay)
+        this.listenTo(m.collect.focuses, 'add', this.addToday);
         this.listenTo(m.collect.focuses, 'remove', this.delToday);
     },
     render: function () {
@@ -53,7 +54,7 @@ m.views.Focuses = Backbone.View.extend({
         return this;
     },
     addToday: function (model) {
-        ga('send', 'event', 'Focus', 'Save');
+         _gaq.push(['_trackEvent', 'Focus', 'Save']);
         m.views.todayFocus = new m.views.Focus({model: model});
         this.$el.find('ol').append(m.views.todayFocus.render().$el.fadeTo(500, 1));
     },
@@ -68,7 +69,7 @@ m.views.Focuses = Backbone.View.extend({
         }
     },
     delToday: function () {
-        ga('send', 'event', 'Focus', 'Delete');
+        _gaq.push(['_trackEvent', 'Focus', 'Delete']);
         this.render();
     },
     edit: function() {

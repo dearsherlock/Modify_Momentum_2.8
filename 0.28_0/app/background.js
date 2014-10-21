@@ -93,7 +93,8 @@ m.views.Background = Backbone.View.extend({
         //this.render();
         this.loadNewBg();//add
         //this.model.on('newDay', _.bind(this.loadNewBg, this));
-	this.listenTo(m, 'newDay', this.loadNewBg, this);
+	//this.listenTo(m, 'newDay', this.loadNewBg, this);
+	this.model.on('change:dayEnd', _.bind(this.loadNewBg, this));
     },
     render: function () {
         /* mark by sherlock
@@ -164,7 +165,7 @@ m.views.Background = Backbone.View.extend({
         } else if ( "" === filename && flickr ) {
         		$.ajax({
                 url: flickr,
-                timeout: 1000
+                timeout: 5000
             })
             .success(function() {
                 that.$el[order]('#' + that.options.region)

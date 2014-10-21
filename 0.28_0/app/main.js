@@ -1,5 +1,5 @@
 // Momentum Dashboard Page Script
-
+/*
 m.isValidDate = function isValidDate(d) {
   if ( Object.prototype.toString.call(d) !== "[object Date]" ) {
     return false;
@@ -34,7 +34,7 @@ function ensureLocalStorageDatesAreValid() {
     }
   }
 }
-
+*/
 /** Models **/
 m.models.Date = Backbone.Model.extend({
     defaults: function () {
@@ -355,7 +355,7 @@ m.views.Dashboard = Backbone.View.extend({
             m.views.introduction = new m.views.Introduction({ region: 'center' });
         } else {
 	    //IF mark below,it will disable show all info,but render flickr is ok
-            //this.render();
+            this.render();
         }
     },
 
@@ -436,7 +436,7 @@ $(function() {
 
     $('#app-return a').click(function(e) {
         e.preventDefault();
-        ga('send', 'event', 'Meta', 'Back to Apps');
+        _gaq.push(['_trackEvent', 'Meta', 'Back to Apps']);
         chrome.tabs.update({
             url:'chrome://apps'
 	});
@@ -444,7 +444,6 @@ $(function() {
     });//add
 
 });
-//add below 8 lines
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-55800824-2-1']);
 _gaq.push(['_trackPageview']);
@@ -454,7 +453,6 @@ _gaq.push(['_trackPageview']);
   ga.src = 'https://ssl.google-analytics.com/u/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
-//add upon 8 lines
 /*
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
