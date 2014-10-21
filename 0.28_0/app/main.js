@@ -1,40 +1,4 @@
 // Momentum Dashboard Page Script
-/*
-m.isValidDate = function isValidDate(d) {
-  if ( Object.prototype.toString.call(d) !== "[object Date]" ) {
-    return false;
-  }
-  return !isNaN(d.getTime());
-};
-
-function isNewDay(date) {
-  var today = new Date(localStorage.today);
-
-  if ((today.getDate() !== date.getDate() && date.getHours() >= 5) || (today.getDate() == date.getDate() && date.getHours() >= 5 && today.getHours() < 5)) {
-   // alert("new day")
-    return true;
-  }
-
-  return false;
-}
-
-function isDateInFuture(date) {
-  return Date.parse(date) > Date.parse(new Date());
-}
-
-function ensureLocalStorageDatesAreValid() {
-  var date = new Date();
-  var dateKeys = ['today', 'backgroundUpdate'];
-
-  for (var i in dateKeys) {
-    var lsDate = new Date(localStorage[dateKeys[i]]);
-    if (!m.isValidDate(lsDate) || isDateInFuture(lsDate)) {
-      console.log('resetting ' + dateKeys[i]);
-      localStorage[dateKeys[i]] = date;
-    }
-  }
-}
-*/
 /** Models **/
 m.models.Date = Backbone.Model.extend({
     defaults: function () {
@@ -313,44 +277,7 @@ m.views.Dashboard = Backbone.View.extend({
             }
         });
 	
-        /* mark by sherlock replace debause it is not retreive flickr image
-	m.collect.backgrounds.fetch({async: false});
-
-        m.views.background = new m.views.Background({
-          collection: m.collect.backgrounds,
-          model: m.models.date,
-          region: 'background'
-        });
-
-        if (!localStorage.name) {
-            m.views.introduction = new m.views.Introduction({ region: 'center' });
-            return;
-        }
-
-        this.render();
-
-        window.addEventListener('storage', function (e) {
-          switch (e.key) {
-            case "background":
-              m.trigger('newDay');
-              break;
-          }
-        });
-
-        ensureLocalStorageDatesAreValid();
-
-        this.dateIntervalId = setInterval(function () {
-          m.models.date.set('date', new Date());
-        }, 100);
-
-        this.newDayIntervalId = setInterval(function () {
-          var date = m.models.date.get('date');
-          if (isNewDay(date)) {
-            localStorage.today = date;
-            m.trigger('newDay');
-          }
-          ensureLocalStorageDatesAreValid();
-        }, 200);*/
+        
 	if (!localStorage['name']) {
             m.views.introduction = new m.views.Introduction({ region: 'center' });
         } else {
@@ -453,15 +380,3 @@ _gaq.push(['_trackPageview']);
   ga.src = 'https://ssl.google-analytics.com/u/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
-/*
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-55800824-2', 'auto');
-ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. See http://stackoverflow.com/a/22152353/1958200
-ga('require', 'displayfeatures');
-ga('send', 'pageview');
-ga('send', 'event', 'BackgroundInfo', 'Impression', localStorage.background);
-*/
