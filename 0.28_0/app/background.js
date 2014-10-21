@@ -44,12 +44,11 @@ m.flickr = {
         var http = 'https://',
             url = 'api.flickr.com/services/rest/?',
             method = 'method=flickr.photos.search',
-            api_key = 'api_key=729e5e1c40dbfe0ee2d1b85e88e281a6',
-            geo_context = 'geo_context=1',
+            api_key = 'api_key=ea0051e3fed310b4541079c92efadac8',
+            geo_context = 'geo_context=0',
             pages = 'page=' + that.getRandomInt( 1, totalPages ),
             format = 'format=json&nojsoncallback=1';
-
-        m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
+				m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
     },
     getImagesUrl: function( photos ) {
         var sample = [];
@@ -151,7 +150,6 @@ m.views.Background = Backbone.View.extend({
 
         // JO: Hack to get the backgrounds to fade between each other; replace with background subviews and separate LIs
         $('#background').css('background-image',$('#background').find('li').css('background-image'));
-
         // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
         if ( "" !== filename ) {
             $('<img/>')
@@ -164,9 +162,9 @@ m.views.Background = Backbone.View.extend({
                 $(this).remove();
             });
         } else if ( "" === filename && flickr ) {
-            $.ajax({
+        		$.ajax({
                 url: flickr,
-                timeout: 7000
+                timeout: 1000
             })
             .success(function() {
                 that.$el[order]('#' + that.options.region)
@@ -181,7 +179,7 @@ m.views.Background = Backbone.View.extend({
         }
     },
     loadNewBg: function () {
-        // attempting to solve the race condition where multiple tabs are open
+    		// attempting to solve the race condition where multiple tabs are open
         /*mark by sherlock
         var now = new Date();
         var backgroundUpdate = new Date(localStorage.backgroundUpdate);

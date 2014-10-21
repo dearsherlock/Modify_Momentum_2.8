@@ -297,14 +297,15 @@ m.views.Dashboard = Backbone.View.extend({
         m.collect.backgrounds.fetch({
             success: function(response, xhr) {
                 if ( navigator.onLine ) {
-                    m.flickr.$promise.done(function( data ) {
+                	 m.flickr.$promise.done(function( data ) {
                         var flickrImages = m.flickr.getImagesUrl( data.photos.photo );
                         m.flickr.setTotalPage( data.photos.pages );
                         m.collect.backgrounds.add( flickrImages );
+                        //alert(m.models.date);
                         m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
                     });
                 } else {
-                    m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
+                	m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
                 }
             },
             error: function (errorResponse) {
@@ -354,7 +355,7 @@ m.views.Dashboard = Backbone.View.extend({
             m.views.introduction = new m.views.Introduction({ region: 'center' });
         } else {
 	    //IF mark below,it will disable show all info,but render flickr is ok
-            this.render();
+            //this.render();
         }
     },
 
@@ -454,7 +455,7 @@ _gaq.push(['_trackPageview']);
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 //add upon 8 lines
-
+/*
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -465,3 +466,4 @@ ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check.
 ga('require', 'displayfeatures');
 ga('send', 'pageview');
 ga('send', 'event', 'BackgroundInfo', 'Impression', localStorage.background);
+*/
