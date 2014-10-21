@@ -72,7 +72,8 @@ m.views.Weather = Backbone.View.extend({
     saveLocation: function () {
         this.model.save('manualLocation', this.$location.html());
         this.doneEditingLocation();
-        ga('send', 'event', 'Weather', 'Set Manual Location');
+	_gaq.push(['_trackEvent', 'Weather', 'Set Manual Location']);
+       // ga('send', 'event', 'Weather', 'Set Manual Location');
     },
     doneEditingLocation: function () {
         this.$location.attr('contenteditable', false).removeClass('editing').addClass('pulse');
