@@ -93,6 +93,8 @@ m.views.CenterClock = Backbone.View.extend({
     },
     render: function () {
         //var time = this.model.getTimeString();
+        console.log("--INITIAL main.CenterClock UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+      
 	var time = this.model.getTime(this.model.get('date'));
         var variables = { time: time };
         var order = (this.options.order  || 'append') + 'To';
@@ -147,6 +149,8 @@ m.views.Greeting = Backbone.View.extend({
         this.listenTo(this.model, 'change:time', this.updatePeriod, this);
     },
     render: function () {
+    	console.log("--INITIAL main.Greeting UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+      
         var period = this.getPeriod();
         var name = localStorage.name;
         var variables = { period: period, name: name };
@@ -206,6 +210,7 @@ m.views.Greeting = Backbone.View.extend({
     }
 });
 
+
 m.views.Introduction = Backbone.View.extend({
     attributes: { id: 'introduction' },
     template: Handlebars.compile( $("#introduction-template").html() ),
@@ -218,6 +223,8 @@ m.views.Introduction = Backbone.View.extend({
     render: function () {
         var order = (this.options.order  || 'append') + 'To';
         this.$el[order]('#' + this.options.region).html(this.template()).fadeTo(1000, 1);
+        
+        
     },
     updateOnEnter: function(e) {
         if (e.keyCode == 13) this.save();
@@ -288,6 +295,9 @@ m.views.Dashboard = Backbone.View.extend({
 
     render: function () {
         // Load widgets
+        
+    	
+   		
         m.views.greeting = new m.views.Greeting({ model: m.models.date, region: 'center', order: 'prepend' });
         m.views.centerClock = new m.views.CenterClock({ model: m.models.date, region: 'center', order: 'prepend' });
 
@@ -314,8 +324,10 @@ m.views.Dashboard = Backbone.View.extend({
                    console.log(errorResponse)
             }
         });
-
-        m.models.weather = new m.models.Weather({ id: 1 });
+        m.models.settings= new m.models.Settings({ id: 3});
+				m.models.settings.fetch();
+				m.views.settings = new m.views.Settings({model:m.models.settings,region: 'bottom-left'})
+				m.models.weather = new m.models.Weather({ id: 1 });
         m.models.weather.fetch();
         m.views.weather = new m.views.Weather({ model: m.models.weather, region: 'top-right', order: 'append' });
 
@@ -342,6 +354,17 @@ m.views.Dashboard = Backbone.View.extend({
                    console.log(errorResponse)
             }
         })
+        //Initial UI
+        console.log("--INITIAL UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+        $("#weather").css("opacity",JSON.parse(localStorage['isshowWeatherVisible'])?"1":"0");
+   			$("#bottom-right").css("opacity",JSON.parse(localStorage['isshowTodoVisible'])?"1":"0");
+   			$("#todo-complete").css("opacity",JSON.parse(localStorage['isshowTodoVisible'])?"1":"0");
+   			
+   			$("#center").css("opacity",JSON.parse(localStorage['isshowSayHelloVisible'])?"1":"0");
+   		  $("#center-below").css("opacity",JSON.parse(localStorage['isshowFocusVisible'])?"1":"0");
+   		  $("#bottom").css("opacity",JSON.parse(localStorage['isshowQuoteVisible'])?"1":"0");
+   		  console.log("log:"+$("#weather").css("opacity"));
+   		  console.log("log_center:"+$("#center").css("opacity"));
     }
 });
 

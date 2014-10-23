@@ -81,6 +81,8 @@ m.views.Todos = Backbone.View.extend({
 	this.collection.fetch();
     },
     render: function() {
+    	  console.log("--INITIAL todo.Todos UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     
         var order = (this.options.order  || 'append') + 'To';
         this.$el[order]('#' + this.options.region).html(this.template()).fadeTo(500, 1);
         m.views.todoCount = new m.views.TodoCount({ collection: m.collect.todos, order: 'append' });
@@ -130,6 +132,7 @@ m.views.Todos = Backbone.View.extend({
         return this.$('li').index(el);
     },
     toggleShow: function (e) {
+    		console.log("toggleShow@todo.js")
         e.preventDefault();
         _gaq.push(['_trackEvent', 'Todo', 'Toggle Show']);
         $('#todo').toggleClass('show');
@@ -159,6 +162,8 @@ m.views.Todo = Backbone.View.extend({
         this.listenTo(this.model, 'change:archive destroy', this.remove);
     },
     render: function() {
+    		console.log("--INITIAL todo.Todo UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     
         var title = this.model.get('title');
         if (this.model.get('done')) { var checked = 'checked' };
         var variables = { title: title, checked: checked };
@@ -228,6 +233,8 @@ m.views.TodoCount = Backbone.View.extend({
         this.listenTo(this.collection, 'all', this.render);
     },
     render: function() {
+       	console.log("--INITIAL todo.TodoCount UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     
         var remaining = this.collection.remaining().length;
         switch(remaining) {
             case 0:
@@ -252,13 +259,15 @@ m.views.TodosComplete = Backbone.View.extend({
         this.render();
     },
     render: function () {
+    	  console.log("--INITIAL todo.TodosComplete UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     
         var done = this.collection.completeToday().length;
         var item = 'todos';
         if (done == 1) { item = "todo" }
         var variables = { done: done, item: item };
 
         var order = (this.options.order  || 'append') + 'To';
-        this.$el[order]('#' + this.options.region).html(this.template(variables)).fadeTo(500, 1);
+        this.$el[order]('#' + this.options.region).html(this.template(variables));//.fadeTo(500, 1);
         if (done) {
             this.$el.show();
         } else {

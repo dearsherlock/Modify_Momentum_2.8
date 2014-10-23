@@ -20,7 +20,8 @@
         <ul id="background"></ul>
 
         <div id="widgets">
-            <div id="top-left"><div id="app-return"><a href="" id="app-return" class="top-nav">Apps</a></div></div>
+            <div id="top-left"><div id="app-return"><a href="" id="app-return" class="top-nav">Apps</a></div>
+            	</div>
             <div id="top-right"></div>
             <div id="center-above"></div>
 
@@ -31,7 +32,7 @@
    			</div>
 
             <div id="bottom-right"></div>
-            <!--<div id="bottom-left"></div>-->
+            <div id="bottom-left"></div>
         </div>
 
         <!-- Handlesbars Templates (Move to external files) -->
@@ -44,12 +45,68 @@
         </script>
 
         <script id="weather-template" type="text/x-handlebars-template">
+        		
             <div class="metric-stat">
                 <span class="icon" data-icon="{{code}}" title="{{condition}}"></span>{{temperature}}&deg;<span class="unit {{unitClass}}">{{unit}}</span>
             </div>
             <span class="location metric-label data">{{location}}</span>
+            
         </script>
-
+				<script id="settings-template" type="text/x-handlebars-template">
+   					<div class="settings-menu">
+                <div class="settings-menu-header">
+                    <a href="" class="settings-toggle settings-close">✕</a><div id="settings-HeaderContent">Configuration</div>
+                </div>
+                <ol>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="showtodo" class="showtodo" type="checkbox" {{isshowTodoVisible}}>
+	                		</label>
+	                		<span>Show Todo Panel</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="showsayhello" class="showsayhello" type="checkbox" {{isshowSayHelloVisible}}>
+	                		</label>
+	                		<span>Show SayHello Panel</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="showfocus" class="showfocus" type="checkbox" {{isshowFocusVisible}}>
+	                		</label>
+	                		<span>Show Focus Panel</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="showweather" class="showweather" type="checkbox" {{isshowWeatherVisible}}>
+	                		</label>
+	                		<span>Show Weather Panel</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="showquote" class="showquote" type="checkbox" {{isshowQuoteVisible}}>
+	                		</label>
+	                		<span>Show Quote Panel</span>
+                		</div>
+                	</li>
+                </ol>
+                <input id="settings-new" class="settings-input" type="text" placeholder="New Settings">
+            
+            </div>
+   					<span id="settings-remaining"></span>
+   					<!--<div id="bottom-left">-->
+   						<a class="settings-toggle top-nav" href="">Settings</a>
+   					<!--</div>-->
+        </script>
         <script id="todo-template" type="text/x-handlebars-template">
             <div class="todo-list">
                 <div class="todo-list-header">
@@ -141,6 +198,7 @@
         <script src="app/focus.js"></script>
         <script src="app/todo.js"></script>
         <script src="app/weather.js"></script>
+        <script src="app/settings.js"></script>
         <script src="app/message.js"></script>
         <script src="app/main.js"></script>
 

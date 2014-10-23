@@ -105,40 +105,82 @@ a:hover { opacity: 1; }
 	/* Todo */
 
 	#todo { opacity: 0; text-align: right; -webkit-user-select: none; user-select: none; }
-		#todo .todo-toggle { line-height: 1.3em; }
-
-	#todo .todo-list { display: block; opacity: 0; height: 0; max-height: 600px; width: 300px; overflow-y: auto; text-align: left; -webkit-transition: all .2s ease; }
+	#todo .todo-toggle { line-height: 1.3em; } 
+	#todo .todo-list { display: block;opacity: 0; 	height: 0; 	max-height: 600px; width: 300px; overflow-y: auto; 	text-align: left; 	-webkit-transition: all .2s ease; }
 	#todo.show .todo-list { opacity: 1; }
 	#todo a { -webkit-transition: all .2s ease; }
-
-	#todo.show .todo-toggle, #todo.show .todo-list { height: auto; background: rgba(0,0,0,1); opacity: 1; }
+	#todo.show .todo-toggle, #todo.show .todo-list { height: auto; 	background: rgba(0,0,0,1); opacity: 1; }
 	#todo.show .todo-toggle { color: rgba(255,255,255,0.8); }
 	#todo.show .todo-toggle:hover { color: #fff; }
-
 	#todo .todo-list-header { position: relative; }
 	#todo-count { padding: 15px 15px 7px; font-size: 0.8em; opacity: 0.7; text-transform: uppercase; }
 	#todo .todo-close { height: 40px; width: 40px; margin: 0; padding: 0; position: absolute; top: 0; right: 0; z-index: 100; background: none !important; line-height: 45px; opacity: 0.4 !important; text-align: center; }
 	#todo .todo-close:hover { opacity: 0.8 !important; }
-
+  /* below is not fit for configuration */
 	#todo .todo-input { width: 100%; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
+	/* below is not fit for configuration */
 	#todo-new { padding: 5px 15px 15px; }
-
 	#todo .view { position: relative; }
 	#todo ol { margin: 0; padding: 0px 15px; }
 	#todo li { padding-bottom: 4px; font-size: 15px; line-height: 1.2em; }
 	#todo span { display: block; margin: 0 18px; cursor: pointer; }
 	#todo label { position: absolute; left: 0; top: 0; height: 100%; margin-left: -15px; padding: 0 5px 0 15px; line-height: 14px; }
-
 	#todo .edit { display: none; margin-left: 18px; }
-
 	#todo .editing .edit { display: block; }
 	#todo .editing .view { display: none; }
-
 	#todo .done span { text-decoration: line-through; opacity: 0.5; }
-
 	#todo .destroy { margin-right: -5px; padding: 0 5px; float: right; visibility: hidden; border: 1px solid rgba(255,255,255,0); border-radius: 100px; cursor: pointer; font-size: 10px; -webkit-transition: all 0.2s ease-in; }
 	#todo .view:hover a.destroy { visibility: visible; }
 	#todo a.destroy:hover { border: 1px solid rgba(255,255,255,0.5); }
+
+	/* Settings */
+	
+	#settings { opacity: 0; text-align: left; -webkit-user-select: none; user-select: none; }
+	#settings .settings-toggle { line-height: 1.3em; }
+	#settings .settings-menu { display: block;opacity: 0; height: 0; max-height: 600px;width: 300px;  overflow-y: auto;text-align: left;  -webkit-transition: all .2s ease; }
+	#settings.show .settings-menu { opacity: 1; }
+	#settings a { -webkit-transition: all .2s ease; }
+	#settings.show .settings-toggle, #settings.show .settings-menu { height: auto;background: rgba(0,0,0,1);opacity: 1; }
+	#settings.show .settings-toggle { color: rgba(255,255,255,0.8); }	
+	#settings.show .settings-toggle:hover { color: #fff; }
+	#settings .settings-menu-header { position: relative; }
+	#settings-HeaderContent { padding: 15px 15px 7px; font-size: 0.8em; opacity: 0.7; text-transform: uppercase; }
+	#settings .settings-close { height: 40px; width: 40px; margin: 0; padding: 0; position: absolute; top: 0; right: 0; z-index: 100; background: none !important; line-height: 45px; opacity: 0.4 !important; text-align: center; }
+	#settings .settings-close:hover { opacity: 0.8 !important; }
+	
+	/* below is not fit for configuration 
+	#todo .todo-input { width: 100%; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
+	*/
+	#settings .settings-input { width: 100%;visibility:hidden; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
+	
+	/* below is not fit for configuration 
+	#todo-new { padding: 5px 15px 15px; }*/
+	#settings-new { padding: 5px 15px 15px; }
+	
+	#settings .view { position: relative; }
+	#settings ol { margin: 0; padding: 0px 15px; }
+	#settings li { padding-bottom: 4px; font-size: 15px; line-height: 1.2em; }
+	#settings span { display: block; margin: 0 18px; cursor: pointer; }
+	#settings label { position: absolute; left: 0; top: 0; height: 100%; margin-left: -15px; padding: 0 5px 0 15px; line-height: 14px; }
+	#settings .edit { display: none; margin-left: 18px; }
+  #settings .editing .edit { display: block; }
+	#settings .editing .view { display: none; }
+	#settings .done span { text-decoration: line-through; opacity: 0.5; }
+	#settings .destroy { margin-right: -5px; padding: 0 5px; float: right; visibility: hidden; border: 1px solid rgba(255,255,255,0); border-radius: 100px; cursor: pointer; font-size: 10px; -webkit-transition: all 0.2s ease-in; }
+	#settings .view:hover a.destroy { visibility: visible; }
+	#settings a.destroy:hover { border: 1px solid rgba(255,255,255,0.5); }
+
+  
+	
+	
+	
+
+
+	
+	
+	
+	
+	@font-face { font-family: 'MeteoconsRegular'; src: url('/font/meteocons-webfont.eot'); src: url('/font/meteocons-webfont.eot?#iefix') format('embedded-opentype'), url('/font/meteocons-webfont.woff') format('woff'), url('/font/meteocons-webfont.ttf') format('truetype'), url('/font/meteocons-webfont.svg#MeteoconsRegular') format('svg'); font-weight: normal; font-style: normal; }
 
 	/* Weather */
 
@@ -179,9 +221,9 @@ a:hover { opacity: 1; }
 	@-webkit-keyframes fadein { from { opacity: 0 } to { opacity: 1 } }
 	@-webkit-keyframes fadeout { from { opacity: 1 } to { opacity: 0 } }
 
-	#bottom-left { opacity: 1; transition: all 0.2s ease-in; }
+	/*#bottom-left { opacity: 1; transition: all 0.2s ease-in; }
 		#bottom-left:hover { opacity: 1; }
-
+*/
 	#background-info, #momentum { display: inline-block; }
 
 	#background-info { height: 80px; width: 240px; position: absolute; left: 0; bottom: 0; font-size: 0.9em; font-weight: 500; opacity: 1; transition: all 0.2s ease; }

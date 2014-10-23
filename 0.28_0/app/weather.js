@@ -28,7 +28,11 @@ m.views.Weather = Backbone.View.extend({
         "webkitAnimationEnd .location": "onAnimationEnd"
     },
     initialize: function () {
+    		//console.log("000");
+    		 //$(this.el).attr('style', 'opacity:0');
+    		// console.log("111");
         // consolidate the top two listeners when we move to 1.0 and test toggle unit (I think that's the problem)
+        
         this.listenTo(this.model, 'change:updated', this.render);
         this.listenTo(this.model, 'change:unit', this.render);
         this.listenTo(this.model, 'change:manualLocation', this.updateWeather);
@@ -40,9 +44,11 @@ m.views.Weather = Backbone.View.extend({
         }.bind(this), 600000);
     },
     render: function() {
+    	console.log("--INITIAL WEATHER UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+        
         var variables = { temperature: this.model.get('temperature'), location: this.model.get('location'), unit: this.model.get('unit'), condition: this.model.get('condition'), code: this.getConditionFromCode(this.model.get('code')), unitClass: this.options.unitClass };
         var order = (this.options.order  || 'append') + 'To';
-        this.$el[order]('#' + this.options.region).html(this.template(variables)).fadeTo(500, 1);
+        this.$el[order]('#' + this.options.region).html(this.template(variables));//.fadeTo(500, 1);//<----it should be mark,because it depend on the configurATION
         this.$location = this.$('.location');
         return this;
     },
