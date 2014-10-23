@@ -41,16 +41,18 @@ m.flickr = {
         var that = this;
         // total pages flickr returned.
         var totalPages = window.localStorage['momentum-flickr-pages'] || 1;
+        console.log("totalPages"+totalPages);
         var http = 'https://',
             url = 'api.flickr.com/services/rest/?',
             method = 'method=flickr.photos.search',
             api_key = 'api_key=ea0051e3fed310b4541079c92efadac8',
-            geo_context = 'geo_context=0',
+            geo_context = 'geo_context=2',
             pages = 'page=' + that.getRandomInt( 1, totalPages ),
             format = 'format=json&nojsoncallback=1';
             console.log( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format);
 				m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
     },
+    //geocontext=0, it will found 0 easily...
     getImagesUrl: function( photos ) {
         var sample = [];
         var that = this;
@@ -80,6 +82,7 @@ m.flickr = {
         return sample;
     },
     setTotalPage: function( num ) {
+    	console.log("settoalpage:"+num);
         window.localStorage['momentum-flickr-pages'] = num;
     }
 };
