@@ -32,7 +32,7 @@ m.views.ShortQuote = Backbone.View.extend({
         this.listenTo(m, 'newDay', this.loadNewQuote, this);
     },
     render: function () {
-    	console.log("--INITIAL SHORTQUOTE UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL SHORTQUOTE UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         
         var that = this;
         var index = window.localStorage['shortquote'];

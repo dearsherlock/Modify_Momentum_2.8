@@ -109,7 +109,7 @@ m.views.Settings=Backbone.View.extend({
         
     },
      render: function() {
-     	   console.log("--INITIAL SETTINGS UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     	  // console.log("--INITIAL SETTINGS UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         
      		var order = (this.options.order  || 'append') + 'To';
      		//console.log("render...isshowTodoVisible="+localStorage['isshowTodoVisible']);

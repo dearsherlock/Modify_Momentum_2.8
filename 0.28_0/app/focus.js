@@ -39,7 +39,7 @@ m.views.Focuses = Backbone.View.extend({
         this.listenTo(m.collect.focuses, 'remove', this.delToday);
     },
     render: function () {
-    	console.log("--INITIAL focus.Focuses UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL focus.Focuses UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         
         var that = this;
         var order = (this.options.order  || 'append') + 'To';
@@ -89,7 +89,7 @@ m.views.FocusPrompt = Backbone.View.extend({
         this.render();
     },
     render: function() {
-    	console.log("--INITIAL focus.FocusPrompt UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL focus.FocusPrompt UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
       
         this.$el.html(this.template());
         return this;
@@ -119,7 +119,7 @@ m.views.Focus = Backbone.View.extend({
         this.render();
     },
     render: function() {
-    	console.log("--INITIAL focus.Focus UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL focus.Focus UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
       
         var variables = { focus: this.model.get('focus'), day: this.model.get('day') };
         this.$el.html(this.template(variables));

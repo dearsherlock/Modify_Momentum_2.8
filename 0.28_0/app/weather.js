@@ -44,7 +44,7 @@ m.views.Weather = Backbone.View.extend({
         }.bind(this), 600000);
     },
     render: function() {
-    	console.log("--INITIAL WEATHER UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL WEATHER UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         
         var variables = { temperature: this.model.get('temperature'), location: this.model.get('location'), unit: this.model.get('unit'), condition: this.model.get('condition'), code: this.getConditionFromCode(this.model.get('code')), unitClass: this.options.unitClass };
         var order = (this.options.order  || 'append') + 'To';

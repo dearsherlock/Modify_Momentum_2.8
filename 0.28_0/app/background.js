@@ -48,6 +48,7 @@ m.flickr = {
             geo_context = 'geo_context=0',
             pages = 'page=' + that.getRandomInt( 1, totalPages ),
             format = 'format=json&nojsoncallback=1';
+            console.log( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format);
 				m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
     },
     getImagesUrl: function( photos ) {

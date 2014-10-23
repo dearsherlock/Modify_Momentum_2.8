@@ -81,7 +81,7 @@ m.views.Todos = Backbone.View.extend({
 	this.collection.fetch();
     },
     render: function() {
-    	  console.log("--INITIAL todo.Todos UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	  //console.log("--INITIAL todo.Todos UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
      
         var order = (this.options.order  || 'append') + 'To';
         this.$el[order]('#' + this.options.region).html(this.template()).fadeTo(500, 1);
@@ -162,7 +162,7 @@ m.views.Todo = Backbone.View.extend({
         this.listenTo(this.model, 'change:archive destroy', this.remove);
     },
     render: function() {
-    		console.log("--INITIAL todo.Todo UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    		//console.log("--INITIAL todo.Todo UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
      
         var title = this.model.get('title');
         if (this.model.get('done')) { var checked = 'checked' };
@@ -233,7 +233,7 @@ m.views.TodoCount = Backbone.View.extend({
         this.listenTo(this.collection, 'all', this.render);
     },
     render: function() {
-       	console.log("--INITIAL todo.TodoCount UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+       	//console.log("--INITIAL todo.TodoCount UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
      
         var remaining = this.collection.remaining().length;
         switch(remaining) {
@@ -259,7 +259,7 @@ m.views.TodosComplete = Backbone.View.extend({
         this.render();
     },
     render: function () {
-    	  console.log("--INITIAL todo.TodosComplete UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	  //console.log("--INITIAL todo.TodosComplete UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
      
         var done = this.collection.completeToday().length;
         var item = 'todos';

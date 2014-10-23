@@ -93,7 +93,7 @@ m.views.CenterClock = Backbone.View.extend({
     },
     render: function () {
         //var time = this.model.getTimeString();
-        console.log("--INITIAL main.CenterClock UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+        //console.log("--INITIAL main.CenterClock UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
       
 	var time = this.model.getTime(this.model.get('date'));
         var variables = { time: time };
@@ -149,7 +149,7 @@ m.views.Greeting = Backbone.View.extend({
         this.listenTo(this.model, 'change:time', this.updatePeriod, this);
     },
     render: function () {
-    	console.log("--INITIAL main.Greeting UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+    	//console.log("--INITIAL main.Greeting UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
       
         var period = this.getPeriod();
         var name = localStorage.name;
@@ -355,7 +355,7 @@ m.views.Dashboard = Backbone.View.extend({
             }
         })
         //Initial UI
-        console.log("--INITIAL UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+       // console.log("--INITIAL UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         $("#weather").css("opacity",JSON.parse(localStorage['isshowWeatherVisible'])?"1":"0");
    			$("#bottom-right").css("opacity",JSON.parse(localStorage['isshowTodoVisible'])?"1":"0");
    			$("#todo-complete").css("opacity",JSON.parse(localStorage['isshowTodoVisible'])?"1":"0");
@@ -363,8 +363,8 @@ m.views.Dashboard = Backbone.View.extend({
    			$("#center").css("opacity",JSON.parse(localStorage['isshowSayHelloVisible'])?"1":"0");
    		  $("#center-below").css("opacity",JSON.parse(localStorage['isshowFocusVisible'])?"1":"0");
    		  $("#bottom").css("opacity",JSON.parse(localStorage['isshowQuoteVisible'])?"1":"0");
-   		  console.log("log:"+$("#weather").css("opacity"));
-   		  console.log("log_center:"+$("#center").css("opacity"));
+   		  //console.log("log:"+$("#weather").css("opacity"));
+   		  //console.log("log_center:"+$("#center").css("opacity"));
     }
 });
 
