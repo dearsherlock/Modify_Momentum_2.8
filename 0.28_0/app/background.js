@@ -5,6 +5,7 @@
 
 m.models.Background = Backbone.Model.extend({
     parse: function(response) {
+    	//console.log("m.models.Background.parse..."+response.filename);
         //this.set({ 'filename': response.filename, 'title': response.title, 'source': response.source, 'sourceUrl': response.sourceUrl, 'shutterstockPromo': response.shutterstockPromo, 'impressionUrl': response.impressionUrl });
     	this.set({ 'filename': response.filename });
     }
@@ -17,6 +18,7 @@ m.collect.Backgrounds = Backbone.Collection.extend({
     model: m.models.Background,
     url: 'app/backgrounds.json',
     parse: function (response) {
+    		//console.log("m.models.Backgrounds.parse..."+response.backgrounds.length);
         return response.backgrounds;
     }
 });
@@ -46,13 +48,21 @@ m.flickr = {
             url = 'api.flickr.com/services/rest/?',
             method = 'method=flickr.photos.search',
             api_key = 'api_key=ea0051e3fed310b4541079c92efadac8',
-            geo_context = 'geo_context=2',
+            geo_context = 'geo_context=1',
             pages = 'page=' + that.getRandomInt( 1, totalPages ),
+            perpage = 'per_page=50',
             format = 'format=json&nojsoncallback=1';
-            console.log( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format);
-				m.flickr.$promise = $.ajax( http + url + method + '&' + api_key + '&' + geo_context + '&' + pages + '&' + format );
+            console.log( http + url + method + '&' + api_key + '&' + perpage + '&' + geo_context + '&' + pages + '&' + format);
+				m.flickr.$promise = $.ajax({
+				url:
+				 http + url + method + '&' + api_key + '&'
+				+ perpage +'&'+ geo_context + '&' + pages + '&' + format ,
+				 timeout: 2000
+				
+				} );
     },
     //geocontext=0, it will found 0 easily...
+    //filenamerender
     getImagesUrl: function( photos ) {
         var sample = [];
         var that = this;
@@ -94,56 +104,18 @@ m.views.Background = Backbone.View.extend({
     // JO: Testing setting background without a template
     //template: Handlebars.compile( $("#background-template").html() ),
     initialize: function () {
-        //this.render();
+    	 
+    	 	window.localStorage['loading']=10000;
+    	  //this.render();
         this.loadNewBg();//add
         //this.model.on('newDay', _.bind(this.loadNewBg, this));
-	//this.listenTo(m, 'newDay', this.loadNewBg, this);
-	this.model.on('change:dayEnd', _.bind(this.loadNewBg, this));
+				//this.listenTo(m, 'newDay', this.loadNewBg, this);
+				this.model.on('change:dayEnd', _.bind(this.loadNewBg, this));
     },
     render: function () {
-        /* mark by sherlock
-        var that = this;
-        var index = window.localStorage['background'];
-        if (!index || Number(index)+1 > this.collection.length) {
-            localStorage.backgrounds = '[]';
-            index = this.getNewIndex();
-        }
-        // make sure shutterstock promo only shows US on update
-        var background = m.collect.backgrounds.at(index);
-        if (background.attributes.shutterstockPromo === true && localStorage.country !== 'US') {
-            localStorage.backgrounds = '[]';
-            index = this.getNewIndex();
-        }
-
-        window.localStorage['background'] = index;
-        var filename = this.collection.at(index).get('filename');
-        var title = this.collection.at(index).get('title');
-        var source = this.collection.at(index).get('source');
-        var sourceUrl = this.collection.at(index).get('sourceUrl');
-        var order = (this.options.order || 'append') + 'To';
-        var impressionUrl = this.collection.at(index).get('impressionUrl');
-
-        // JO: Hack to get the backgrounds to fade between each other; replace with background subviews and separate LIs
-        $('#background').css('background-image',$('#background').find('li').css('background-image'));
-
-        // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
-        $('<img/>').attr('src', 'backgrounds/' + filename).load(function() {
-            that.$el[order]('#' + that.options.region).css('background-image','url(backgrounds/' + filename + ')').css('opacity','0').fadeTo(200, 1);
-            $(this).remove();
-        });
-
-        // JO: Render Background Info subview
-        this.backgroundInfo = new m.views.BackgroundInfo({ region: 'bottom-left', title: title, source: source, sourceUrl: sourceUrl });
-        var order = (this.backgroundInfo.options.order  || 'append') + 'To';
-        $('#background-info').remove();
-        this.backgroundInfo.render().$el[order]('#' + this.backgroundInfo.options.region);
-
-        // Shutterstock tracking pixel
-        if (impressionUrl) {
-            $('body').append('<img src="'+impressionUrl+'">');
-        }
-        */
-	//ADD beblow contents
+    		console.log("m.views.Background render...");
+        
+				//ADD beblow contents
         var that = this;
         var index = window.localStorage['background'] || 0;
         //console.log('index is ' + index);
@@ -157,6 +129,7 @@ m.views.Background = Backbone.View.extend({
         $('#background').css('background-image',$('#background').find('li').css('background-image'));
         // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
         if ( "" !== filename ) {
+        		console.log("caching filename:"+filename);
             $('<img/>')
             .attr('src', 'backgrounds/' + filename)
             .load(function() {
@@ -167,9 +140,10 @@ m.views.Background = Backbone.View.extend({
                 $(this).remove();
             });
         } else if ( "" === filename && flickr ) {
+        		console.log("limit:"+window.localStorage['loading']);
         		$.ajax({
                 url: flickr,
-                timeout: 5000
+                timeout: window.localStorage['loading']
             })
             .success(function() {
                 that.$el[order]('#' + that.options.region)
@@ -177,34 +151,24 @@ m.views.Background = Backbone.View.extend({
                 .css('opacity','0')
                 .fadeTo(200, 1);
             })
-            .fail(function() {
-                console.log("timeout fail");
-                that.loadStockBg();
+            /*
+            .error( function(response) {
+    					data = $.evalJSON(response.responseText);
+    					alert(data);
+ 						 })*/
+            .fail(function(response,STATUS,exception) {
+               	console.log("AJAX LOADING ERROR:{"+response.responseText+"}");
+							 	that.loadStockBg();
             });
         }
     },
     loadNewBg: function () {
     		// attempting to solve the race condition where multiple tabs are open
-        /*mark by sherlock
-        var now = new Date();
-        var backgroundUpdate = new Date(localStorage.backgroundUpdate);
-
-        if (Date.parse(now) > Date.parse(backgroundUpdate) || !m.isValidDate(backgroundUpdate)) {
-            localStorage.backgroundUpdate = now;
-            var index = this.getNewIndex();            
-            localStorage.background = index;
-        }
-        this.render();
-        */
-	// REPLACE BY below code
-        //console.log('loadNewBg called');
+        
         var index = window.localStorage['background'];
-        //console.log('current bg: ' + index);
         var newIndex = Math.floor(Math.random()*this.collection.models.length);
-        //console.log('new bg: ' + newIndex);
         if (newIndex == index) newIndex + 1;
         if (newIndex == this.collection.models.length) newIndex = 0;
-        //console.log('new bg: ' + newIndex);
         window.localStorage['background'] = newIndex;
         this.render();
     },
@@ -214,44 +178,7 @@ m.views.Background = Backbone.View.extend({
         window.localStorage['background'] = newIndex;
         this.render();
     }
-    /* mark by sherlock
-    getNewIndex: function () {
-        
-        var currentIndex = localStorage.background;
-        var backgrounds = JSON.parse(localStorage.backgrounds || "[]");
-
-        // Get new background index from background that isn't the current one
-        var newBackground = null;
-        while (newBackground === null || Number(newBackground)+1 > this.collection.length) {
-
-            // Repopulate backgrounds array if new or empty
-            if (backgrounds.length === 0) {
-                backgrounds = Object.keys(m.collect.backgrounds.models);
-            }
-
-            var newIndex = Math.floor(Math.random()*backgrounds.length);
-            
-            // Ensure we don't get duplicate image when we regenerate backgrounds buffer array
-            while (currentIndex === newIndex) {
-                newIndex = Math.floor(Math.random()*backgrounds.length);
-            }
-
-            // Cut the chosen background out of the backgrounds array
-            newBackground = backgrounds.splice(newIndex, 1)[0];
-        }
-
-        // Save the modified backgrounds array
-        localStorage.backgrounds = JSON.stringify(backgrounds);
-        
-        // If we aren't in the US, need to make sure that we don't get
-        // a promo photo.
-        var background = m.collect.backgrounds.at(newBackground);
-        if (background.attributes.shutterstockPromo === true && localStorage.country !== 'US') {
-            var newBackground = this.getNewIndex();
-        }
-
-        return newBackground;
-    }*/
+    
     
 });
 /* mark by sherlock

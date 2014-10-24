@@ -265,17 +265,32 @@ m.views.Dashboard = Backbone.View.extend({
 	m.collect.backgrounds = new m.collect.Backgrounds();
 	
 	// JO: Fetch is async so wait for results before instantiating view
+	//m.collect.backgrounds.fetch 是非同步，會去pase background.json，而每一個item都是m.models.Background，只會塞filename
+	
         m.collect.backgrounds.fetch({
             success: function(response, xhr) {
+            	//成功表示讀取background.json成功。
                 if ( navigator.onLine ) {
-                	 m.flickr.$promise.done(function( data ) {
+                	 //console.log("navigator.onLine")
+                	 //這裡有時候執行flickr search 會比較慢，最好是可以設定timeout時間
+                	 m.flickr.$promise.success(function( data ) {
+                	 			//data已經是一個物件，且是一個flickr 查詢結果的json格式陣列。
                         var flickrImages = m.flickr.getImagesUrl( data.photos.photo );
+                        
                         m.flickr.setTotalPage( data.photos.pages );
                         m.collect.backgrounds.add( flickrImages );
                         //alert(m.models.date);
                         m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
                     });
+                   m.flickr.$promise.error(function(data){
+                   		console.log("****retrieve flickr search fail...");
+                   	
+                   		m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
+               
+                   	})
+                    
                 } else {
+                	//console.log("navigator.offLine")
                 	m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
                 }
             },
