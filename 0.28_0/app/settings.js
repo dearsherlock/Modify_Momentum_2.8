@@ -31,6 +31,12 @@ m.models.Settings = Backbone.Model.extend({
         	console.log("initialize isshowQuoteVisible...");
             localStorage['isshowQuoteVisible'] = false;
         }
+        if (!localStorage['TimeoutSetting']) {
+        	console.log("initialize TimeoutSetting...");
+            localStorage['TimeoutSetting'] = 3;
+        }
+        
+        //window.localStorage['loading']
         
     },
     localStorage: new Backbone.LocalStorage("momentum-settings"),
@@ -53,13 +59,28 @@ m.views.Settings=Backbone.View.extend({
        	"click .showfocus"   : "showFocusVisible",
        	"click .showweather"   : "showWeatherVisible",
        	"click .showquote"   : "showQuoteVisible",
+       	"keypress #timeout-setting":  "setTimeoutOnEnter",
     },
     
      initialize: function () {
      		this.render();
 				return this;
     },
-    
+    setTimeoutOnEnter: function (e) {
+    	console.log("---setTimeoutOnEnter---");
+       // _gaq.push(['_trackEvent', 'Todo', 'Add']);
+        var val = this.$el.find('#timeout-setting')[0].value;
+        //if (e.keyCode != 13) return;
+        if (!val) return;
+        if (val>100){
+        	alert("It will loading too long...");
+        	}
+        console.log(val);
+        localStorage['timeoutSettingValue']=val;
+        window.localStorage['loading']=val*1000;
+        //this.collection.create({ title: val });
+        //this.$el.find('#timeout-setting')[0].value = '';
+    },
     showTodoVisible:function (e){
     	
     	console.log("showTodoVisible");
@@ -108,20 +129,34 @@ m.views.Settings=Backbone.View.extend({
         localStorage['showSettingsList'] = !JSON.parse(localStorage['showSettingsList']);
         
     },
-     render: function() {
+    render: function() {
      	  // console.log("--INITIAL SETTINGS UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
         
      		var order = (this.options.order  || 'append') + 'To';
      		//console.log("render...isshowTodoVisible="+localStorage['isshowTodoVisible']);
+     		var fd=localStorage['timeoutSettingValue'];
      		var variables = { 
      			isshowTodoVisible: (JSON.parse(localStorage['isshowTodoVisible'])? "checked" : ""), 
      			isshowSayHelloVisible:(JSON.parse(localStorage['isshowSayHelloVisible'])? "checked" : ""),
         	isshowFocusVisible:(JSON.parse(localStorage['isshowFocusVisible'])? "checked" : ""),
         	isshowWeatherVisible:(JSON.parse(localStorage['isshowWeatherVisible'])? "checked" : ""),
-        	isshowQuoteVisible:(JSON.parse(localStorage['isshowQuoteVisible'] )? "checked" : "")
-     			
+        	isshowQuoteVisible:(JSON.parse(localStorage['isshowQuoteVisible'] )? "checked" : ""),
+        	timeoutSettingValue: (localStorage['timeoutSettingValue'] ? localStorage['timeoutSettingValue'] : "Timeout Setting(second)")
+     			//localStorage['TimeoutSetting'] = 3000;
      			 };
-        
+     			 variables.timeoutSettingValue 
+     		if(typeof (parseInt(variables.timeoutSettingValue ))== 'number'){
+							
+ 					console.log(variables.timeoutSettingValue + " is a number <br/>");
+ 						window.localStorage['loading']=parseInt(variables.timeoutSettingValue );
+ 				}
+ 				else{
+ 					console.log(variables.timeoutSettingValue + " is not a number <br/>");
+							window.localStorage['loading']=5000;
+ 					
+ 				}
+        	//window.localStorage['loading']=IsNumeric(variables.timeoutSettingValue)?timeoutSettingValue*1000: 2000;
+     		
         this.$el[order]('#' + this.options.region).html(this.template(variables)).fadeTo(500, 1);
         
 				//region reload configuration

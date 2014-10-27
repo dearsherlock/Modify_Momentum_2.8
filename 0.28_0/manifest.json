@@ -13,9 +13,12 @@
       "16": "icon-16.png",
       "48": "icon-48.png"
    },
+   "web_accessible_resources":[
+   "backgrounds/*"
+   ],
    "manifest_version": 2,
    "name": "Momentum",
    "offline_enabled": true,
-   "permissions": [ "geolocation", "unlimitedStorage", "*://*.yahooapis.com/*", "*://*.momentumdash.com/*" ],
+   "permissions": [ "geolocation", "unlimitedStorage", "*://*.yahooapis.com/*", "*://*.momentumdash.com/*" ,"downloads"],
    "version": "0.28"
 }

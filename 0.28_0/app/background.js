@@ -19,7 +19,7 @@ m.collect.Backgrounds = Backbone.Collection.extend({
     url: 'app/backgrounds.json',
     parse: function (response) {
     		//console.log("m.models.Backgrounds.parse..."+response.backgrounds.length);
-        return response.backgrounds;
+    		return response.backgrounds;
     }
 });
 
@@ -105,7 +105,7 @@ m.views.Background = Backbone.View.extend({
     //template: Handlebars.compile( $("#background-template").html() ),
     initialize: function () {
     	 
-    	 	window.localStorage['loading']=10000;
+    	 	//window.localStorage['loading']=10000;
     	  //this.render();
         this.loadNewBg();//add
         //this.model.on('newDay', _.bind(this.loadNewBg, this));
