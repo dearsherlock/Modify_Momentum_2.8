@@ -151,7 +151,7 @@ a:hover { opacity: 1; }
 	/* below is not fit for configuration 
 	#todo .todo-input { width: 100%; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
 	*/
-	#settings .settings-input { width: 100%; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
+	#settings .settings-input { width: 70%; background: none; border: 0; box-sizing: border-box; color: #fff; font-size: 15px; opacity: 0.8; outline-width: 0; }
 	
 	/* below is not fit for configuration 
 	#todo-new { padding: 5px 15px 15px; }*/

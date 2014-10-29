@@ -44,6 +44,16 @@ m.flickr = {
         // total pages flickr returned.
         var totalPages = window.localStorage['momentum-flickr-pages'] || 1;
         console.log("totalPages"+totalPages);
+        
+        var testData=window.localStorage['test-data'];
+        if(testData){
+        	console.log("test Cross Data="+testData);
+        }
+        else{
+        	console.log("none cross data");	
+        }
+        
+        
         var http = 'https://',
             url = 'api.flickr.com/services/rest/?',
             method = 'method=flickr.photos.search',

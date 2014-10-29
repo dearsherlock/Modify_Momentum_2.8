@@ -76,6 +76,17 @@ m.views.Settings=Backbone.View.extend({
         	alert("It will loading too long...");
         	}
         console.log(val);
+        if(typeof (parseInt(val ))== 'number'){
+ 						//window.localStorage['loading']=parseInt(val );
+ 				}
+ 				else{
+ 					console.log("setting initial 5 sec");
+ 					val=5;
+						//	window.localStorage['loading']=5000;
+ 					
+ 				}
+        
+        
         localStorage['timeoutSettingValue']=val;
         window.localStorage['loading']=val*1000;
         //this.collection.create({ title: val });
@@ -144,11 +155,11 @@ m.views.Settings=Backbone.View.extend({
         	timeoutSettingValue: (localStorage['timeoutSettingValue'] ? localStorage['timeoutSettingValue'] : "Timeout Setting(second)")
      			//localStorage['TimeoutSetting'] = 3000;
      			 };
-     			 variables.timeoutSettingValue 
+     			 
      		if(typeof (parseInt(variables.timeoutSettingValue ))== 'number'){
 							
  					console.log(variables.timeoutSettingValue + " is a number <br/>");
- 						window.localStorage['loading']=parseInt(variables.timeoutSettingValue );
+ 						window.localStorage['loading']=parseInt(variables.timeoutSettingValue )*1000;
  				}
  				else{
  					console.log(variables.timeoutSettingValue + " is not a number <br/>");
