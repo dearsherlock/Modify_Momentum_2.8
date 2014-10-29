@@ -261,9 +261,13 @@ m.views.Dashboard = Backbone.View.extend({
         var dateTimer = setInterval(function () {
             m.models.date.set('date', new Date());
         }, 50);
+        var isLoadLocalImage=JSON.parse(localStorage['isLoadLocalImage'] );
+        var isLoadFlickrSearchImage=JSON.parse(localStorage['isLoadFlickrSearchImage'] );
+        var isLoadFlickrFavoriteImage=JSON.parse(localStorage['isLoadFlickrFavoriteImage'] );
+        
         
 	m.collect.backgrounds = new m.collect.Backgrounds();
-	
+	var tempLocal = new m.collect.Backgrounds();
 	// JO: Fetch is async so wait for results before instantiating view
 	//m.collect.backgrounds.fetch 是非同步，會去pase background.json，而每一個item都是m.models.Background，只會塞filename
 	
@@ -275,10 +279,29 @@ m.views.Dashboard = Backbone.View.extend({
                 	 //這裡有時候執行flickr search 會比較慢，最好是可以設定timeout時間
                 	 m.flickr.$promise.success(function( data ) {
                 	 			//data已經是一個物件，且是一個flickr 查詢結果的json格式陣列。
-                        var flickrImages = m.flickr.getImagesUrl( data.photos.photo );
+                	 			if(!isLoadLocalImage){
+                	 				//需要先暫存一份
+                	 				tempLocal=m.collect.backgrounds;
+                	 				m.collect.backgrounds = new m.collect.Backgrounds();
+                	 			}
+                	 			if(isLoadFlickrSearchImage){
+                	 				var flickrImages = m.flickr.getImagesUrl( data.photos.photo );
+                        	m.flickr.setTotalPage( data.photos.pages );
+                        	m.collect.backgrounds.add( flickrImages );
+                	 			}
                         
-                        m.flickr.setTotalPage( data.photos.pages );
-                        m.collect.backgrounds.add( flickrImages );
+                        //加入flickr favorites:自己用快速鍵加入的圖片。
+                        if(isLoadFlickrFavoriteImage){
+                        	var flickrFavorites=[];
+	                        if(window.localStorage['flickr-favoriteDs']){
+	 													flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
+	 												}
+	                        m.collect.backgrounds.add( flickrFavorites );
+                        }
+                        if(m.collect.backgrounds.length==0){
+                        	m.collect.backgrounds=tempLocal;
+                        }
+                        
                         //alert(m.models.date);
                         m.views.background = new m.views.Background({ collection: m.collect.backgrounds, model: m.models.date, region: 'background' });
                     });

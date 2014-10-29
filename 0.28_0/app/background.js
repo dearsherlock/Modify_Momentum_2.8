@@ -138,7 +138,7 @@ m.views.Background = Backbone.View.extend({
         // JO: Hack to get the backgrounds to fade between each other; replace with background subviews and separate LIs
         $('#background').css('background-image',$('#background').find('li').css('background-image'));
         // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
-        if ( "" !== filename ) {
+        if ( filename && "" !== filename ) {
         		console.log("caching filename:"+filename);
             $('<img/>')
             .attr('src', 'backgrounds/' + filename)
@@ -149,8 +149,12 @@ m.views.Background = Backbone.View.extend({
                 .fadeTo(200, 1);
                 $(this).remove();
             });
-        } else if ( "" === filename && flickr ) {
+        } else if ( (!filename || "" === filename) && flickr ) {
         		console.log("limit:"+window.localStorage['loading']);
+        		if(flickr.substring(0, 7) != 'http://' & flickr.substring(0, 9) != 'https://')
+	      		{
+	        		flickr="http://"+flickr;
+	      		}
         		$.ajax({
                 url: flickr,
                 timeout: window.localStorage['loading']

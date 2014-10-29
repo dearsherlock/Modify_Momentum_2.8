@@ -85,6 +85,29 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
  	
  	window.localStorage['test-data']=mainsrc;
  	console.log("--finish--"+mainsrc);
+ 	var flickrFavorites=[];
+ 	
+ 	if(window.localStorage['flickr-favoriteDs']){
+ 		flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
+ 	}
+ 	/*
+ 	 sample.push({
+                   filename: '',
+                   title: photo.title,
+                   source: "",
+                   source_url: "",
+                   flickr:  _makePicUrl( photo )
+                });
+ 	*/
+ 	flickrFavorites.push({
+ 		filename:'',
+ 		title:mainsrc,
+ 		source:"",
+ 		source_url:"",
+ 		flickr:mainsrc
+ 		});
+ 		console.log("flickrFavorites' size="+flickrFavorites.length);
+ 		window.localStorage['flickr-favoriteDs']=JSON.stringify(flickrFavorites);
  	//alert("main photo="+mainsrc);
 });
 

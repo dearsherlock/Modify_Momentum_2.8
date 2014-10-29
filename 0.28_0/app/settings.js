@@ -35,6 +35,18 @@ m.models.Settings = Backbone.Model.extend({
         	console.log("initialize TimeoutSetting...");
             localStorage['TimeoutSetting'] = 3;
         }
+        if (!localStorage['isLoadLocalImage']) {
+        	console.log("initialize isLoadLocalImage...");
+            localStorage['isLoadLocalImage'] = true;
+        }
+        if (!localStorage['isLoadFlickrSearchImage']) {
+        	console.log("initialize isLoadFlickrSearchImage...");
+            localStorage['isLoadFlickrSearchImage'] = true;
+        }
+        if (!localStorage['isLoadFlickrFavoriteImage']) {
+        	console.log("initialize isLoadFlickrFavoriteImage...");
+            localStorage['isLoadFlickrFavoriteImage'] = true;
+        }
         
         //window.localStorage['loading']
         
@@ -59,6 +71,10 @@ m.views.Settings=Backbone.View.extend({
        	"click .showfocus"   : "showFocusVisible",
        	"click .showweather"   : "showWeatherVisible",
        	"click .showquote"   : "showQuoteVisible",
+       	"click .isLoadLocalImage"   : "loadLocalImage",
+       	"click .isLoadFlickrSearchImage"   : "loadFlickrSearch",
+       	"click .isLoadFlickrFavoriteImage"   : "loadFavorites",
+       	"click .clearFavorite" : "clearFavorite",
        	"keypress #timeout-setting":  "setTimeoutOnEnter",
     },
     
@@ -131,7 +147,20 @@ m.views.Settings=Backbone.View.extend({
     	$("#bottom").css("opacity",JSON.parse(localStorage['isshowQuoteVisible'])?"1":"0");
    		
      },
-    
+    loadLocalImage:function (e){
+    	localStorage['isLoadLocalImage'] = !JSON.parse(localStorage['isLoadLocalImage']);
+    },
+    loadFlickrSearch:function (e){
+    	localStorage['isLoadFlickrSearchImage'] = !JSON.parse(localStorage['isLoadFlickrSearchImage']);
+    },
+    loadFavorites:function (e){
+    	localStorage['isLoadFlickrFavoriteImage'] = !JSON.parse(localStorage['isLoadFlickrFavoriteImage']);
+    },
+    clearFavorite:function (e){
+    	
+    	window.localStorage.removeItem('flickr-favoriteDs');
+    	alert("Clear Favorite Pictures Sucess!");
+    },
     toggleShow: function (e) {
     		console.log("this is toggleShow@settings button");
         e.preventDefault();
@@ -152,7 +181,12 @@ m.views.Settings=Backbone.View.extend({
         	isshowFocusVisible:(JSON.parse(localStorage['isshowFocusVisible'])? "checked" : ""),
         	isshowWeatherVisible:(JSON.parse(localStorage['isshowWeatherVisible'])? "checked" : ""),
         	isshowQuoteVisible:(JSON.parse(localStorage['isshowQuoteVisible'] )? "checked" : ""),
-        	timeoutSettingValue: (localStorage['timeoutSettingValue'] ? localStorage['timeoutSettingValue'] : "Timeout Setting(second)")
+        	timeoutSettingValue: (localStorage['timeoutSettingValue'] ? localStorage['timeoutSettingValue'] : "Timeout Setting(second)"),
+     			isLoadLocalImage:(JSON.parse(localStorage['isLoadLocalImage'] )? "checked" : ""),
+        	isLoadFlickrSearchImage:(JSON.parse(localStorage['isLoadFlickrSearchImage'] )? "checked" : ""),
+        	isLoadFlickrFavoriteImage:(JSON.parse(localStorage['isLoadFlickrFavoriteImage'] )? "checked" : ""),
+        	
+     			
      			//localStorage['TimeoutSetting'] = 3000;
      			 };
      			 

@@ -99,21 +99,52 @@
 	                		<span>Show Quote Panel</span>
                 		</div>
                 	</li>
-                	
+                	<li>
+                		<hr/>
+                	</li>
                 	<li>
                 		<div class="view">
                 			Timeout：  <input id="timeout-setting" class="settings-input" type="text" placeholder="{{timeoutSettingValue}}">
             				</div>
                 	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="isLoadLocalImage" class="isLoadLocalImage" type="checkbox" {{isLoadLocalImage}}>
+	                		</label>
+	                		<span>Load Local Image</span>
+                		</div>
+                	</li>
+                	
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="isLoadFlickrSearchImage" class="isLoadFlickrSearchImage" type="checkbox" {{isLoadFlickrSearchImage}}>
+	                		</label>
+	                		<span>Load Flickr Serach Image</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="isLoadFlickrFavoriteImage" class="isLoadFlickrFavoriteImage" type="checkbox"  {{isLoadFlickrFavoriteImage}}>
+	                		</label>
+	                		<span>Load Favorite @Flickr</span>
+                		</div>
+                	</li>
+                	<li>
+                		<div class="view">
+	                		<label>
+	                			<input id="clearFavorites" class="clearFavorite" type="button" value="Clear Favorites" >
+	                		</label>
+	                		
+                		</div>
+                	</li>
                 </ol>
-                
-            
             </div>
    					<span id="settings-remaining"></span>
-   					<!--<div id="bottom-left">-->
-   						<a class="settings-toggle top-nav" href="">Settings</a>
-   					<!--</div>-->
-        </script>
+   					<a class="settings-toggle top-nav" href="">Settings</a>
+   			</script>
         <script id="todo-template" type="text/x-handlebars-template">
             <div class="todo-list">
                 <div class="todo-list-header">
