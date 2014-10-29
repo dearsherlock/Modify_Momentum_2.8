@@ -137,7 +137,7 @@ a:hover { opacity: 1; }
 	
 	#settings { opacity: 0; text-align: left; -webkit-user-select: none; user-select: none; }
 	#settings .settings-toggle { line-height: 1.3em; }
-	#settings .settings-menu { display: block;opacity: 0; height: 0; max-height: 600px;width: 300px;  overflow-y: auto;text-align: left;  -webkit-transition: all .2s ease; }
+	#settings .settings-menu { display: block;opacity: 0; height: 0; max-height: 600px;width: 300px; min-height:300px;  overflow-y: auto;text-align: left;  -webkit-transition: all .2s ease; }
 	#settings.show .settings-menu { opacity: 1; }
 	#settings a { -webkit-transition: all .2s ease; }
 	#settings.show .settings-toggle, #settings.show .settings-menu { height: auto;background: rgba(0,0,0,1);opacity: 1; }
