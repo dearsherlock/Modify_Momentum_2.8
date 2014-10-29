@@ -123,7 +123,7 @@ m.views.Background = Backbone.View.extend({
 				this.model.on('change:dayEnd', _.bind(this.loadNewBg, this));
     },
     render: function () {
-    		console.log("m.views.Background render...");
+    	//	console.log("m.views.Background render...");
         
 				//ADD beblow contents
         var that = this;
@@ -139,7 +139,7 @@ m.views.Background = Backbone.View.extend({
         $('#background').css('background-image',$('#background').find('li').css('background-image'));
         // JO: Make sure the background image loads before displaying (even locally there can be a small delay)
         if ( filename && "" !== filename ) {
-        		console.log("caching filename:"+filename);
+        		//console.log("caching filename:"+filename);
             $('<img/>')
             .attr('src', 'backgrounds/' + filename)
             .load(function() {
@@ -150,7 +150,7 @@ m.views.Background = Backbone.View.extend({
                 $(this).remove();
             });
         } else if ( (!filename || "" === filename) && flickr ) {
-        		console.log("limit:"+window.localStorage['loading']);
+        		//console.log("limit:"+window.localStorage['loading']);
         		if(flickr.substring(0, 7) != 'http://' & flickr.substring(0, 9) != 'https://')
 	      		{
 	        		flickr="http://"+flickr;

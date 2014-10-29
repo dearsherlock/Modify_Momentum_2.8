@@ -75,6 +75,7 @@ m.views.Settings=Backbone.View.extend({
        	"click .isLoadFlickrSearchImage"   : "loadFlickrSearch",
        	"click .isLoadFlickrFavoriteImage"   : "loadFavorites",
        	"click .clearFavorite" : "clearFavorite",
+       	"click .exportFavorites" : "exportFavorites",
        	"keypress #timeout-setting":  "setTimeoutOnEnter",
     },
     
@@ -161,6 +162,54 @@ m.views.Settings=Backbone.View.extend({
     	window.localStorage.removeItem('flickr-favoriteDs');
     	alert("Clear Favorite Pictures Sucess!");
     },
+    exportFavorites:function(e){
+    	
+    	var flickrFavorites=[];
+    	var stringHtml="";
+	    if(window.localStorage['flickr-favoriteDs']){
+	    	stringHtml=window.localStorage['flickr-favoriteDs'];
+	 			flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
+	 		}
+	 		console.log(flickrFavorites.length);
+	 		var d = new Date();
+			var curr_date = d.getDate();
+			var curr_month = d.getMonth();
+			var curr_year = d.getFullYear();
+			var date_str=curr_year+"-"+(curr_month+1)+"-"+curr_date;
+			
+	 		var result="---\r\nlayout: post\rcategory : life \r\ntagline: \"Flickr Favorites\"\r\n"
+	 		+ "tags : [life,photos share,flickr] \r\ntitle: \"("+date_str+"Update)Share My Photos\""
+	 		
+	 		+"\r\n\r\n---\r\n### Share My Flickr Favorites  \r\n\r\n";
+	 		var index=0;
+	 		flickrFavorites.forEach(function(entry) {
+	 			index++;
+	 			result=result+index+". [link]("+entry.title+")\r\n![image]("+entry.flickr+")\r";
+   			//result.concat("[link](",entry.title,")","  ![image](",entry.flickr,")");
+   			/*
+   			[link](https://farm8.staticflickr.com/7547/15469530877_2131317974_o.jpg)
+
+![image](https://farm8.staticflickr.com/7547/15469530877_2131317974_o.jpg) 
+
+   			*/
+   		  
+   			//console.log("title="+entry.title+",src="+entry.flickr);
+			});
+			//console.log(result);
+			
+	 		this.downloadFileFromText(date_str+"-Update_Share My Flickr Favorite Photos.md",result);
+	 		//console.log(stringHtml);
+    },
+		downloadFileFromText:function(filename, content) {
+	    var a = document.createElement('a');
+	    var blob = new Blob([ content ], {type : "text/plain;charset=UTF-8"});
+	    a.href = window.URL.createObjectURL(blob);
+	    a.download = filename;
+	    a.style.display = 'none';
+	    document.body.appendChild(a);
+	    a.click(); //this is probably the key - simulating a click on a download link
+	    delete a;// we don't need this anymore
+		},
     toggleShow: function (e) {
     		console.log("this is toggleShow@settings button");
         e.preventDefault();
@@ -192,7 +241,7 @@ m.views.Settings=Backbone.View.extend({
      			 
      		if(typeof (parseInt(variables.timeoutSettingValue ))== 'number'){
 							
- 					console.log(variables.timeoutSettingValue + " is a number <br/>");
+ 					//console.log(variables.timeoutSettingValue + " is a number <br/>");
  						window.localStorage['loading']=parseInt(variables.timeoutSettingValue )*1000;
  				}
  				else{

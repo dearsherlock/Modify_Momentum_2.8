@@ -40,7 +40,9 @@ chrome.commands.onCommand.addListener(function(command) {
 	      (
 	        tab.id, 
 	        {
-	          "code":"chrome.runtime.sendMessage({\"content\":document.body.innerHTML})"
+	        	  "code":"chrome.runtime.sendMessage({\"content\":document.body.innerHTML,\"pageurl\":document.URL})"
+	      	
+	        //  "code":"chrome.runtime.sendMessage({\"content\":document.body.innerHTML})"
 	      	}
 	      );
         
@@ -79,6 +81,7 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
 	if(window.localStorage['test-data']){
 		console.log("last access:"+window.localStorage['test-data']);
 	}
+	var pageurl=msg.pageurl;
  	var st =$('<p />').html(msg.content); //document.createElement('p');
  	var tt=st.find(".main-photo");
  	var mainsrc=tt[0].attributes["src"].value.substring(2);
@@ -86,7 +89,10 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
  	window.localStorage['test-data']=mainsrc;
  	console.log("--finish--"+mainsrc);
  	var flickrFavorites=[];
- 	
+ 	//title<meta name="og:url" content="https://www.flickr.com/photos/hkvam/8672732039/"  data-dynamic="true">
+  //var titleObj=st.find(".og:url");
+ 	//var mainsrc=titleObj[0].attributes["content"].value;
+ 		
  	if(window.localStorage['flickr-favoriteDs']){
  		flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
  	}
@@ -99,9 +105,13 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
                    flickr:  _makePicUrl( photo )
                 });
  	*/
+ 	if(mainsrc.substring(0, 7) != 'http://' & mainsrc.substring(0, 8) != 'https://')
+	{
+		mainsrc="http://"+mainsrc;
+	}
  	flickrFavorites.push({
  		filename:'',
- 		title:mainsrc,
+ 		title:pageurl,
  		source:"",
  		source_url:"",
  		flickr:mainsrc
