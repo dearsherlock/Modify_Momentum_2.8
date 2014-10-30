@@ -17,12 +17,12 @@
       "48": "icon-48.png"
    },
    "web_accessible_resources":[
-   "backgrounds/*"
+   "backgrounds/*","img/notification.png"
    ],
    "manifest_version": 2,
    "name": "Sherlock_Momentum",
    "offline_enabled": true,
-   "permissions": [ "geolocation", "unlimitedStorage",  "*://*/*" ,"downloads","tabs"],
+   "permissions": [ "geolocation", "unlimitedStorage",  "*://*/*" ,"downloads","tabs", "notifications"],
    "version": "0.28",
    "commands": {
     "toggle-feature-foo": {

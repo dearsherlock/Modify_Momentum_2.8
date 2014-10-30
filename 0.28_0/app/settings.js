@@ -196,7 +196,7 @@ m.views.Settings=Backbone.View.extend({
    			//console.log("title="+entry.title+",src="+entry.flickr);
 			});
 			//console.log(result);
-			
+			this.downloadFileFromText("favorites.json",stringHtml);
 	 		this.downloadFileFromText(date_str+"-Update_Share My Flickr Favorite Photos.md",result);
 	 		//console.log(stringHtml);
     },

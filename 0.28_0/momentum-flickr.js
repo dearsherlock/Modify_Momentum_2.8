@@ -118,6 +118,25 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
  		});
  		console.log("flickrFavorites' size="+flickrFavorites.length);
  		window.localStorage['flickr-favoriteDs']=JSON.stringify(flickrFavorites);
+ 		/*if(window.webkitNotifications){
+ 			var notification=windows.webkitNotifications.createNotification('img/notification.png','Hello Title','Content...');
+ 			notification.show();
+ 		//}
+ 		*/
+ 		var d=new Date();
+ 		var opt = {
+        type: "basic",
+        title: "Flickr tab@Sherlock",
+        message: mainsrc+" added successfully! \r\nTotal "+flickrFavorites.length+" images",
+        iconUrl: "img/notification.png"
+	  };
+	  chrome.notifications.create("ID"+d.getTime(),opt,function(){});
+ 		/*var notification = chrome.notifications.create('itemAdd',opt,function(){});
+
+  	notification.show();
+*/
+ 		
+ 		
  	//alert("main photo="+mainsrc);
 });
 
