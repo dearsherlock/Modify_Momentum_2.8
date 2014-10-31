@@ -363,8 +363,32 @@ m.views.Dashboard = Backbone.View.extend({
             }
         });
         m.models.settings= new m.models.Settings({ id: 3});
-				m.models.settings.fetch();
-				m.views.settings = new m.views.Settings({model:m.models.settings,region: 'bottom-left'})
+				//mark by sherlock testing,因為其實並非collection
+				//m.models.settings.fetch();
+				
+				
+				
+				m.collect.settingFavorites =new m.collect.SettingFavorites();
+				m.collect.settingFavorites.fetch();
+				var flickrFavorites=[];
+ 				if(window.localStorage['flickr-favoriteDs']){
+ 					flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
+ 				}
+ 				console.log(flickrFavorites.length);
+ 				var tempModel;
+
+				while (tempModel = m.collect.settingFavorites.first()) {
+  				tempModel.destroy();
+				}
+				
+ 				flickrFavorites.forEach(function(entry) {
+ 					var fi=new m.models.SettingFavorite({title:entry.title,flickrurl:entry.flickrurl}) ;
+ 					console.log(entry.title+","+entry.flickrurl);
+ 					m.collect.settingFavorites.create(fi)	;
+ 				});
+			//	m.views.settingFavorite=new m.views.SettingFavorite({collection:m.collect.settingFavorites});
+				m.views.settings = new m.views.Settings({collection:m.collect.settingFavorites,
+					region: 'bottom-left'});
 				m.models.weather = new m.models.Weather({ id: 1 });
         m.models.weather.fetch();
         m.views.weather = new m.views.Weather({ model: m.models.weather, region: 'top-right', order: 'append' });

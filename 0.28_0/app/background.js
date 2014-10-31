@@ -125,7 +125,7 @@ m.views.Background = Backbone.View.extend({
         //console.log('localstorage background is ' + localStorage['background']);
         window.localStorage['background'] = index;
         var filename = this.collection.at(index).get('filename');
-        var flickr = this.collection.at(index).get('flickr');
+        var flickr = this.collection.at(index).get('flickrurl');
         var order = (this.options.order || 'append') + 'To';
 
         // JO: Hack to get the backgrounds to fade between each other; replace with background subviews and separate LIs

@@ -3,6 +3,30 @@
 
 // Models
 
+m.models.SettingFavorite= Backbone.Model.extend({
+   defaults: function() {
+        return {
+            title: "empty todo...",
+            flickrurl: ""
+        };
+    }
+  
+  });
+//main.jsassign collection
+m.collect.SettingFavorites= Backbone.Collection.extend({
+  model: m.models.SettingFavorite,
+    localStorage: new Backbone.LocalStorage("flickr-settingFavorites"),
+    initialize: function () 
+    {
+     	  
+ 				
+    },
+    create: function(model, options) {
+        return Backbone.Collection.prototype.create.call(this, model, options);
+    }
+});
+
+
 m.models.Settings = Backbone.Model.extend({
     
     initialize: function () {
@@ -52,16 +76,64 @@ m.models.Settings = Backbone.Model.extend({
         
     },
     localStorage: new Backbone.LocalStorage("momentum-settings"),
+    settingFavorites:new m.collect.SettingFavorites(),
     defaults:{
         
         
     }
 });
 
+
+m.views.SettingFavorite = Backbone.View.extend({
+   tagName: "li",
+   template: Handlebars.compile($("#setting-favorite-item-template").html()),
+    events: {
+        "click a.destroy" : "clear"
+       },
+    initialize: function(options) {
+        	 
+        this.parent = options.parent;
+        this.listenTo(this.model, 'change', this.render);
+        this.render();
+     //  this.listenTo(this.collection, 'add', this.addOneFavorite);
+       // this.listenTo(this.collection, 'reset', this.addAllFavorites);
+    },
+   
+    render: function() {
+    		//console.log("--INITIAL todo.Todo UI--@"+ (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds());
+     
+        var title = this.model.get('title');
+        var flickrurl = this.model.get('flickrurl');
+       // if (this.model.get('done')) { var checked = 'checked' };
+        var variables = { title: title, flickrurl: flickrurl };
+        this.$el.html(this.template(variables));
+        //this.$el.toggleClass('done', this.model.get('done'));
+        this.$el.prop('draggable', 'true');
+
+        return this;
+    },
+    clear: function() {
+        _gaq.push(['_trackEvent', 'Todo', 'Delete']);
+        this.model.destroy();
+    },
+    close: function() {
+        // cancel edit if esc key hit
+        var value = this.$el.find('.edit').val();
+        if (!value) {
+            this.clear();
+        } else {
+            this.model.save({ title: value });
+            this.$el.removeClass("editing");
+        }
+    }
+});
+
+
 // Collections
 
 // Views
 m.views.Settings=Backbone.View.extend({
+		tagName: "li",
 		attributes: { id: 'settings'},
 		template: Handlebars.compile($("#settings-template").html() ),
     events: {
@@ -80,8 +152,24 @@ m.views.Settings=Backbone.View.extend({
     },
     
      initialize: function () {
+      _.bindAll(this, 'addOneFavorite', 'addAllFavorites');
+        this.listenTo(this.collection, 'add', this.addOneFavorite);
+        this.listenTo(this.collection, 'reset', this.addAllFavorites);
+        
+       
+      
+        
+        
      		this.render();
+     		this.collection.fetch();
 				return this;
+    },
+    addOneFavorite: function(favorite) {
+        var favoriteView = new m.views.SettingFavorite({ model: favorite, parent: this });
+        this.$(".favoriteList ol").append(favoriteView.render().el);
+    },
+    addAllFavorites: function() {
+        _.each(this.collection.models, this.addOneFavorite);
     },
     setTimeoutOnEnter: function (e) {
     	console.log("---setTimeoutOnEnter---");
@@ -158,7 +246,16 @@ m.views.Settings=Backbone.View.extend({
     	localStorage['isLoadFlickrFavoriteImage'] = !JSON.parse(localStorage['isLoadFlickrFavoriteImage']);
     },
     clearFavorite:function (e){
+    	this.collection.reset();
     	
+    	var tempModel;
+
+			while (tempModel = this.collection.first()) {
+  				tempModel.destroy();
+			}
+				
+    	
+    	//this.collection.save();
     	window.localStorage.removeItem('flickr-favoriteDs');
     	alert("Clear Favorite Pictures Sucess!");
     },
@@ -184,7 +281,7 @@ m.views.Settings=Backbone.View.extend({
 	 		var index=0;
 	 		flickrFavorites.forEach(function(entry) {
 	 			index++;
-	 			result=result+index+". [link]("+entry.title+")\r\n![image]("+entry.flickr+")\r";
+	 			result=result+index+". [link]("+entry.title+")\r\n![image]("+entry.flickrurl+")\r";
    			//result.concat("[link](",entry.title,")","  ![image](",entry.flickr,")");
    			/*
    			[link](https://farm8.staticflickr.com/7547/15469530877_2131317974_o.jpg)
@@ -238,7 +335,7 @@ m.views.Settings=Backbone.View.extend({
      			
      			//localStorage['TimeoutSetting'] = 3000;
      			 };
-     			 
+     			// this.collection.fetch();
      		if(typeof (parseInt(variables.timeoutSettingValue ))== 'number'){
 							
  					//console.log(variables.timeoutSettingValue + " is a number <br/>");
@@ -258,6 +355,7 @@ m.views.Settings=Backbone.View.extend({
         if (JSON.parse(localStorage['showSettingsList']) == true) { this.$el.toggleClass('show'); }
         
         
+         
         
         
         return this;

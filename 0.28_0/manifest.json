@@ -1,8 +1,9 @@
 {
    "background": {
       "persistent": true,
-      "scripts": [ "momentum-flickr.js","js/jquery-1.11.1.min.js" ]
+      "scripts": [ "momentum-flickr.js","js/jquery-1.11.1.min.js"]
    },
+   
    "chrome_url_overrides": {
       "newtab": "dashboard.html"
    },

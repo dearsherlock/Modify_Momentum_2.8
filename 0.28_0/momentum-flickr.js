@@ -51,6 +51,8 @@ chrome.commands.onCommand.addListener(function(command) {
 	
 	
 });
+
+
 chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) 
 {
 	var pageurl=msg.pageurl;
@@ -66,12 +68,18 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
 	{
 		mainsrc="http://"+mainsrc;
 	}
+	/*
+	var c = new Backbone.Collection();
+	c.localStorage = new Backbone.LocalStorage("flickr-settingFavorites");
+	c.fetch();
+	console.log(c.pluck('title'));
+	*/
  	flickrFavorites.push({
  		filename:'',
  		title:pageurl,
  		source:"",
  		source_url:"",
- 		flickr:mainsrc
+ 		flickrurl:mainsrc
  		});
  		console.log("flickrFavorites' size="+flickrFavorites.length);
  		window.localStorage['flickr-favoriteDs']=JSON.stringify(flickrFavorites);
@@ -79,9 +87,12 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse)
  		var opt = {
         type: "basic",
         title: "Flickr tab@Sherlock",
-        message: mainsrc+" added successfully! \r\nTotal "+flickrFavorites.length+" images",
+        message: pageurl+" added successfully! \r\nTotal "+flickrFavorites.length+" images",
         iconUrl: "img/notification.png"
 	  };
+	  
+	 // m.collect.settingFavorites.create({ title:pageurl,flickr:mainsrc });
+	 console.log("i999:"+pageurl+","+mainsrc);
 	  chrome.notifications.create("ID"+d.getTime(),opt,function(){});
 });
 

@@ -139,12 +139,22 @@
                 	
 	                		</div>
                 	</li>
-                	
+                	<li>
+                		<div class="favoriteList">
+                			<ol></ol>
+                		<div>
+                	</li>
                 </ol>
             </div>
    					<span id="settings-remaining"></span>
    					<a class="settings-toggle top-nav" href="">Settings</a>
    			</script>
+   			<script id="setting-favorite-item-template" type="text/x-handlebars-template">
+            <div class="view">
+                <a class="destroy">✕</a>
+                <a target="_blank" href={{flickrurl}}>{{title}}</a>
+            </div>
+        </script>
         <script id="todo-template" type="text/x-handlebars-template">
             <div class="todo-list">
                 <div class="todo-list-header">
