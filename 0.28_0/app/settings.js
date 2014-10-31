@@ -94,6 +94,7 @@ m.views.SettingFavorite = Backbone.View.extend({
         	 
         this.parent = options.parent;
         this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'destroy', this.remove);
         this.render();
      //  this.listenTo(this.collection, 'add', this.addOneFavorite);
        // this.listenTo(this.collection, 'reset', this.addAllFavorites);
@@ -113,8 +114,21 @@ m.views.SettingFavorite = Backbone.View.extend({
         return this;
     },
     clear: function() {
-        _gaq.push(['_trackEvent', 'Todo', 'Delete']);
+        _gaq.push(['_trackEvent', 'Settings', 'Delete']);
+        
+        this.removeJsonStorage(this.model);
         this.model.destroy();
+    },
+    removeJsonStorage:function(favoriteData){
+    	var flickrFavorites=[];
+ 			if(window.localStorage['flickr-favoriteDs']){
+ 					flickrFavorites=JSON.parse(window.localStorage['flickr-favoriteDs']);
+ 			}
+ 			
+ 			flickrFavorites = jQuery.grep(flickrFavorites, function(value) {
+        return ((value.title != favoriteData.get('title')) &&(value.flickrurl != favoriteData.get('flickrurl')));
+      });
+ 				window.localStorage['flickr-favoriteDs']=JSON.stringify(flickrFavorites);
     },
     close: function() {
         // cancel edit if esc key hit
